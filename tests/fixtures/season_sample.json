@@ -1,0 +1,2713 @@
+{
+ "clan_tag": "#TESTCLAN",
+ "clan_name": "Test Clan",
+ "season": "2026-10-02",
+ "number_of_rounds": 7,
+ "wars": [
+  {
+   "round_index": 0,
+   "war_tag": "#WAR01",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P002",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P004",
+        "stars": 2,
+        "destruction": 85
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P006",
+        "stars": 1,
+        "destruction": 94
+       }
+      ]
+     },
+     {
+      "tag": "#P007",
+      "name": "Player 07",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": []
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P009",
+        "stars": 2,
+        "destruction": 97
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P011",
+        "stars": 2,
+        "destruction": 88
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P013",
+        "stars": 2,
+        "destruction": 74
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P015",
+        "stars": 2,
+        "destruction": 73
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P017",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P019",
+        "stars": 2,
+        "destruction": 98
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P021",
+        "stars": 2,
+        "destruction": 79
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P023",
+        "stars": 2,
+        "destruction": 73
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P025",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P027",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P029",
+        "stars": 1,
+        "destruction": 92
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP01",
+    "clan_name": "Opponent 01",
+    "members": [
+     {
+      "tag": "#P002",
+      "name": "Enemy 02",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P022",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P004",
+      "name": "Enemy 04",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P003",
+        "stars": 2,
+        "destruction": 85
+       }
+      ]
+     },
+     {
+      "tag": "#P006",
+      "name": "Enemy 06",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P005",
+        "stars": 2,
+        "destruction": 74
+       }
+      ]
+     },
+     {
+      "tag": "#P030",
+      "name": "Enemy 30",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P007",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P009",
+      "name": "Enemy 09",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P008",
+        "stars": 2,
+        "destruction": 81
+       }
+      ]
+     },
+     {
+      "tag": "#P011",
+      "name": "Enemy 11",
+      "town_hall": 18,
+      "map_position": 6,
+      "attacks": [
+       {
+        "defender_tag": "#P010",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P013",
+      "name": "Enemy 13",
+      "town_hall": 18,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P012",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P015",
+      "name": "Enemy 15",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P014",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P017",
+      "name": "Enemy 17",
+      "town_hall": 17,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P016",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P019",
+      "name": "Enemy 19",
+      "town_hall": 17,
+      "map_position": 10,
+      "attacks": [
+       {
+        "defender_tag": "#P018",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P021",
+      "name": "Enemy 21",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P020",
+        "stars": 2,
+        "destruction": 58
+       }
+      ]
+     },
+     {
+      "tag": "#P023",
+      "name": "Enemy 23",
+      "town_hall": 16,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P028",
+        "stars": 2,
+        "destruction": 64
+       }
+      ]
+     },
+     {
+      "tag": "#P025",
+      "name": "Enemy 25",
+      "town_hall": 16,
+      "map_position": 13,
+      "attacks": []
+     },
+     {
+      "tag": "#P027",
+      "name": "Enemy 27",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P026",
+        "stars": 2,
+        "destruction": 94
+       }
+      ]
+     },
+     {
+      "tag": "#P029",
+      "name": "Enemy 29",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P024",
+        "stars": 2,
+        "destruction": 91
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "round_index": 1,
+   "war_tag": "#WAR02",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P031",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P032",
+        "stars": 2,
+        "destruction": 95
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P033",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P007",
+      "name": "Player 07",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P034",
+        "stars": 1,
+        "destruction": 70
+       }
+      ]
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P035",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P036",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P037",
+        "stars": 2,
+        "destruction": 75
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P038",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P039",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P040",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P041",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P042",
+        "stars": 2,
+        "destruction": 83
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P043",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P044",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P045",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP02",
+    "clan_name": "Opponent 02",
+    "members": [
+     {
+      "tag": "#P031",
+      "name": "Enemy 31",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P001",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P032",
+      "name": "Enemy 32",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P003",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P033",
+      "name": "Enemy 33",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P005",
+        "stars": 2,
+        "destruction": 65
+       }
+      ]
+     },
+     {
+      "tag": "#P034",
+      "name": "Enemy 34",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P007",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P035",
+      "name": "Enemy 35",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P008",
+        "stars": 1,
+        "destruction": 90
+       }
+      ]
+     },
+     {
+      "tag": "#P036",
+      "name": "Enemy 36",
+      "town_hall": 18,
+      "map_position": 6,
+      "attacks": [
+       {
+        "defender_tag": "#P010",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P037",
+      "name": "Enemy 37",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P012",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P038",
+      "name": "Enemy 38",
+      "town_hall": 17,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P014",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P039",
+      "name": "Enemy 39",
+      "town_hall": 17,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P016",
+        "stars": 2,
+        "destruction": 83
+       }
+      ]
+     },
+     {
+      "tag": "#P040",
+      "name": "Enemy 40",
+      "town_hall": 16,
+      "map_position": 10,
+      "attacks": [
+       {
+        "defender_tag": "#P018",
+        "stars": 2,
+        "destruction": 73
+       }
+      ]
+     },
+     {
+      "tag": "#P041",
+      "name": "Enemy 41",
+      "town_hall": 18,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P020",
+        "stars": 2,
+        "destruction": 59
+       }
+      ]
+     },
+     {
+      "tag": "#P042",
+      "name": "Enemy 42",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P022",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P043",
+      "name": "Enemy 43",
+      "town_hall": 15,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P026",
+        "stars": 1,
+        "destruction": 62
+       }
+      ]
+     },
+     {
+      "tag": "#P044",
+      "name": "Enemy 44",
+      "town_hall": 16,
+      "map_position": 19,
+      "attacks": [
+       {
+        "defender_tag": "#P024",
+        "stars": 2,
+        "destruction": 80
+       }
+      ]
+     },
+     {
+      "tag": "#P045",
+      "name": "Enemy 45",
+      "town_hall": 14,
+      "map_position": 21,
+      "attacks": [
+       {
+        "defender_tag": "#P028",
+        "stars": 2,
+        "destruction": 75
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "round_index": 2,
+   "war_tag": "#WAR03",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P046",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P047",
+        "stars": 2,
+        "destruction": 86
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P048",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P049",
+        "stars": 2,
+        "destruction": 73
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P050",
+        "stars": 2,
+        "destruction": 99
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P051",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P052",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P053",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P054",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P055",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P056",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P057",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P058",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P059",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P060",
+      "name": "Player 60",
+      "town_hall": 14,
+      "map_position": 23,
+      "attacks": [
+       {
+        "defender_tag": "#P061",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP03",
+    "clan_name": "Opponent 03",
+    "members": [
+     {
+      "tag": "#P046",
+      "name": "Enemy 46",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P001",
+        "stars": 2,
+        "destruction": 86
+       }
+      ]
+     },
+     {
+      "tag": "#P047",
+      "name": "Enemy 47",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P003",
+        "stars": 2,
+        "destruction": 54
+       }
+      ]
+     },
+     {
+      "tag": "#P048",
+      "name": "Enemy 48",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P005",
+        "stars": 2,
+        "destruction": 97
+       }
+      ]
+     },
+     {
+      "tag": "#P049",
+      "name": "Enemy 49",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P012",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P050",
+      "name": "Enemy 50",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P010",
+        "stars": 2,
+        "destruction": 89
+       }
+      ]
+     },
+     {
+      "tag": "#P052",
+      "name": "Enemy 52",
+      "town_hall": 17,
+      "map_position": 6,
+      "attacks": [
+       {
+        "defender_tag": "#P008",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P053",
+      "name": "Enemy 53",
+      "town_hall": 16,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P014",
+        "stars": 2,
+        "destruction": 95
+       }
+      ]
+     },
+     {
+      "tag": "#P051",
+      "name": "Enemy 51",
+      "town_hall": 15,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P016",
+        "stars": 2,
+        "destruction": 91
+       }
+      ]
+     },
+     {
+      "tag": "#P054",
+      "name": "Enemy 54",
+      "town_hall": 15,
+      "map_position": 10,
+      "attacks": [
+       {
+        "defender_tag": "#P018",
+        "stars": 1,
+        "destruction": 71
+       }
+      ]
+     },
+     {
+      "tag": "#P055",
+      "name": "Enemy 55",
+      "town_hall": 16,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P020",
+        "stars": 2,
+        "destruction": 97
+       }
+      ]
+     },
+     {
+      "tag": "#P056",
+      "name": "Enemy 56",
+      "town_hall": 15,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P022",
+        "stars": 2,
+        "destruction": 72
+       }
+      ]
+     },
+     {
+      "tag": "#P057",
+      "name": "Enemy 57",
+      "town_hall": 15,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P026",
+        "stars": 2,
+        "destruction": 91
+       }
+      ]
+     },
+     {
+      "tag": "#P058",
+      "name": "Enemy 58",
+      "town_hall": 15,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P024",
+        "stars": 2,
+        "destruction": 86
+       }
+      ]
+     },
+     {
+      "tag": "#P059",
+      "name": "Enemy 59",
+      "town_hall": 14,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P060",
+        "stars": 1,
+        "destruction": 81
+       }
+      ]
+     },
+     {
+      "tag": "#P061",
+      "name": "Enemy 61",
+      "town_hall": 15,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P028",
+        "stars": 2,
+        "destruction": 79
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "round_index": 3,
+   "war_tag": "#WAR04",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P062",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P063",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P064",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P007",
+      "name": "Player 07",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P065",
+        "stars": 2,
+        "destruction": 75
+       }
+      ]
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P066",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P067",
+        "stars": 2,
+        "destruction": 83
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P068",
+        "stars": 1,
+        "destruction": 86
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P069",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P070",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P071",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P072",
+        "stars": 2,
+        "destruction": 85
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P073",
+        "stars": 2,
+        "destruction": 96
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P074",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P075",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P076",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP04",
+    "clan_name": "Opponent 04",
+    "members": [
+     {
+      "tag": "#P062",
+      "name": "Enemy 62",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P003",
+        "stars": 2,
+        "destruction": 62
+       }
+      ]
+     },
+     {
+      "tag": "#P063",
+      "name": "Enemy 63",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P007",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P064",
+      "name": "Enemy 64",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P001",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P065",
+      "name": "Enemy 65",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P012",
+        "stars": 2,
+        "destruction": 64
+       }
+      ]
+     },
+     {
+      "tag": "#P066",
+      "name": "Enemy 66",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P014",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P067",
+      "name": "Enemy 67",
+      "town_hall": 18,
+      "map_position": 6,
+      "attacks": [
+       {
+        "defender_tag": "#P016",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P068",
+      "name": "Enemy 68",
+      "town_hall": 18,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P018",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P069",
+      "name": "Enemy 69",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P005",
+        "stars": 1,
+        "destruction": 80
+       }
+      ]
+     },
+     {
+      "tag": "#P070",
+      "name": "Enemy 70",
+      "town_hall": 17,
+      "map_position": 9,
+      "attacks": []
+     },
+     {
+      "tag": "#P071",
+      "name": "Enemy 71",
+      "town_hall": 18,
+      "map_position": 10,
+      "attacks": [
+       {
+        "defender_tag": "#P020",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P072",
+      "name": "Enemy 72",
+      "town_hall": 18,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P022",
+        "stars": 2,
+        "destruction": 93
+       }
+      ]
+     },
+     {
+      "tag": "#P073",
+      "name": "Enemy 73",
+      "town_hall": 18,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P008",
+        "stars": 1,
+        "destruction": 95
+       }
+      ]
+     },
+     {
+      "tag": "#P074",
+      "name": "Enemy 74",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": []
+     },
+     {
+      "tag": "#P075",
+      "name": "Enemy 75",
+      "town_hall": 17,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P010",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P076",
+      "name": "Enemy 76",
+      "town_hall": 15,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P028",
+        "stars": 1,
+        "destruction": 52
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "round_index": 4,
+   "war_tag": "#WAR05",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P077",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P078",
+        "stars": 2,
+        "destruction": 82
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P079",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P007",
+      "name": "Player 07",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P080",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P081",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P082",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P083",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P084",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P085",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P086",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P087",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P088",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P089",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P090",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P091",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP05",
+    "clan_name": "Opponent 05",
+    "members": [
+     {
+      "tag": "#P077",
+      "name": "Enemy 77",
+      "town_hall": 15,
+      "map_position": 1,
+      "attacks": []
+     },
+     {
+      "tag": "#P078",
+      "name": "Enemy 78",
+      "town_hall": 15,
+      "map_position": 2,
+      "attacks": []
+     },
+     {
+      "tag": "#P079",
+      "name": "Enemy 79",
+      "town_hall": 15,
+      "map_position": 3,
+      "attacks": []
+     },
+     {
+      "tag": "#P080",
+      "name": "Enemy 80",
+      "town_hall": 14,
+      "map_position": 4,
+      "attacks": []
+     },
+     {
+      "tag": "#P081",
+      "name": "Enemy 81",
+      "town_hall": 13,
+      "map_position": 5,
+      "attacks": []
+     },
+     {
+      "tag": "#P082",
+      "name": "Enemy 82",
+      "town_hall": 12,
+      "map_position": 6,
+      "attacks": []
+     },
+     {
+      "tag": "#P083",
+      "name": "Enemy 83",
+      "town_hall": 12,
+      "map_position": 7,
+      "attacks": []
+     },
+     {
+      "tag": "#P084",
+      "name": "Enemy 84",
+      "town_hall": 11,
+      "map_position": 8,
+      "attacks": []
+     },
+     {
+      "tag": "#P085",
+      "name": "Enemy 85",
+      "town_hall": 11,
+      "map_position": 9,
+      "attacks": []
+     },
+     {
+      "tag": "#P086",
+      "name": "Enemy 86",
+      "town_hall": 11,
+      "map_position": 10,
+      "attacks": []
+     },
+     {
+      "tag": "#P087",
+      "name": "Enemy 87",
+      "town_hall": 11,
+      "map_position": 11,
+      "attacks": []
+     },
+     {
+      "tag": "#P088",
+      "name": "Enemy 88",
+      "town_hall": 11,
+      "map_position": 12,
+      "attacks": []
+     },
+     {
+      "tag": "#P089",
+      "name": "Enemy 89",
+      "town_hall": 11,
+      "map_position": 13,
+      "attacks": []
+     },
+     {
+      "tag": "#P090",
+      "name": "Enemy 90",
+      "town_hall": 11,
+      "map_position": 14,
+      "attacks": []
+     },
+     {
+      "tag": "#P091",
+      "name": "Enemy 91",
+      "town_hall": 9,
+      "map_position": 15,
+      "attacks": []
+     }
+    ]
+   }
+  },
+  {
+   "round_index": 5,
+   "war_tag": "#WAR06",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P092",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P093",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P094",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P007",
+      "name": "Player 07",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P095",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P096",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P097",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P098",
+        "stars": 2,
+        "destruction": 82
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P099",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P100",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P101",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P102",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P103",
+        "stars": 2,
+        "destruction": 88
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P104",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P105",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P106",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP06",
+    "clan_name": "Opponent 06",
+    "members": [
+     {
+      "tag": "#P092",
+      "name": "Enemy 92",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P001",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P093",
+      "name": "Enemy 93",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P003",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P094",
+      "name": "Enemy 94",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P012",
+        "stars": 2,
+        "destruction": 86
+       }
+      ]
+     },
+     {
+      "tag": "#P095",
+      "name": "Enemy 95",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P005",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P096",
+      "name": "Enemy 96",
+      "town_hall": 17,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P007",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P097",
+      "name": "Enemy 97",
+      "town_hall": 17,
+      "map_position": 6,
+      "attacks": [
+       {
+        "defender_tag": "#P016",
+        "stars": 2,
+        "destruction": 98
+       }
+      ]
+     },
+     {
+      "tag": "#P098",
+      "name": "Enemy 98",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P008",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P099",
+      "name": "Enemy 99",
+      "town_hall": 17,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P010",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P100",
+      "name": "Enemy 100",
+      "town_hall": 17,
+      "map_position": 9,
+      "attacks": []
+     },
+     {
+      "tag": "#P101",
+      "name": "Enemy 101",
+      "town_hall": 16,
+      "map_position": 10,
+      "attacks": [
+       {
+        "defender_tag": "#P026",
+        "stars": 2,
+        "destruction": 86
+       }
+      ]
+     },
+     {
+      "tag": "#P102",
+      "name": "Enemy 102",
+      "town_hall": 16,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P022",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P103",
+      "name": "Enemy 103",
+      "town_hall": 15,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P028",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P104",
+      "name": "Enemy 104",
+      "town_hall": 15,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P024",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P105",
+      "name": "Enemy 105",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P020",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P106",
+      "name": "Enemy 106",
+      "town_hall": 18,
+      "map_position": 20,
+      "attacks": []
+     }
+    ]
+   }
+  },
+  {
+   "round_index": 6,
+   "war_tag": "#WAR07",
+   "state": "warEnded",
+   "mine": {
+    "clan_tag": "#TESTCLAN",
+    "clan_name": "Test Clan",
+    "members": [
+     {
+      "tag": "#P001",
+      "name": "Player 01",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P107",
+        "stars": 2,
+        "destruction": 95
+       }
+      ]
+     },
+     {
+      "tag": "#P003",
+      "name": "Player 03",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P108",
+        "stars": 2,
+        "destruction": 83
+       }
+      ]
+     },
+     {
+      "tag": "#P005",
+      "name": "Player 05",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P109",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P007",
+      "name": "Player 07",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P110",
+        "stars": 1,
+        "destruction": 53
+       }
+      ]
+     },
+     {
+      "tag": "#P008",
+      "name": "Player 08",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P111",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P010",
+      "name": "Player 10",
+      "town_hall": 17,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P112",
+        "stars": 2,
+        "destruction": 85
+       }
+      ]
+     },
+     {
+      "tag": "#P012",
+      "name": "Player 12",
+      "town_hall": 18,
+      "map_position": 8,
+      "attacks": [
+       {
+        "defender_tag": "#P113",
+        "stars": 1,
+        "destruction": 80
+       }
+      ]
+     },
+     {
+      "tag": "#P014",
+      "name": "Player 14",
+      "town_hall": 18,
+      "map_position": 9,
+      "attacks": [
+       {
+        "defender_tag": "#P114",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P016",
+      "name": "Player 16",
+      "town_hall": 17,
+      "map_position": 11,
+      "attacks": [
+       {
+        "defender_tag": "#P115",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P020",
+      "name": "Player 20",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": [
+       {
+        "defender_tag": "#P116",
+        "stars": 2,
+        "destruction": 95
+       }
+      ]
+     },
+     {
+      "tag": "#P018",
+      "name": "Player 18",
+      "town_hall": 17,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P117",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P022",
+      "name": "Player 22",
+      "town_hall": 16,
+      "map_position": 14,
+      "attacks": [
+       {
+        "defender_tag": "#P118",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P026",
+      "name": "Player 26",
+      "town_hall": 16,
+      "map_position": 15,
+      "attacks": [
+       {
+        "defender_tag": "#P119",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P024",
+      "name": "Player 24",
+      "town_hall": 16,
+      "map_position": 16,
+      "attacks": [
+       {
+        "defender_tag": "#P120",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P028",
+      "name": "Player 28",
+      "town_hall": 16,
+      "map_position": 17,
+      "attacks": [
+       {
+        "defender_tag": "#P121",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     }
+    ]
+   },
+   "theirs": {
+    "clan_tag": "#OPP07",
+    "clan_name": "Opponent 07",
+    "members": [
+     {
+      "tag": "#P107",
+      "name": "Enemy 107",
+      "town_hall": 18,
+      "map_position": 1,
+      "attacks": [
+       {
+        "defender_tag": "#P001",
+        "stars": 2,
+        "destruction": 81
+       }
+      ]
+     },
+     {
+      "tag": "#P108",
+      "name": "Enemy 108",
+      "town_hall": 18,
+      "map_position": 2,
+      "attacks": [
+       {
+        "defender_tag": "#P003",
+        "stars": 2,
+        "destruction": 89
+       }
+      ]
+     },
+     {
+      "tag": "#P109",
+      "name": "Enemy 109",
+      "town_hall": 18,
+      "map_position": 3,
+      "attacks": [
+       {
+        "defender_tag": "#P005",
+        "stars": 2,
+        "destruction": 79
+       }
+      ]
+     },
+     {
+      "tag": "#P110",
+      "name": "Enemy 110",
+      "town_hall": 18,
+      "map_position": 4,
+      "attacks": [
+       {
+        "defender_tag": "#P007",
+        "stars": 2,
+        "destruction": 72
+       }
+      ]
+     },
+     {
+      "tag": "#P111",
+      "name": "Enemy 111",
+      "town_hall": 18,
+      "map_position": 5,
+      "attacks": [
+       {
+        "defender_tag": "#P008",
+        "stars": 2,
+        "destruction": 98
+       }
+      ]
+     },
+     {
+      "tag": "#P112",
+      "name": "Enemy 112",
+      "town_hall": 18,
+      "map_position": 6,
+      "attacks": [
+       {
+        "defender_tag": "#P010",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P113",
+      "name": "Enemy 113",
+      "town_hall": 18,
+      "map_position": 7,
+      "attacks": [
+       {
+        "defender_tag": "#P012",
+        "stars": 2,
+        "destruction": 67
+       }
+      ]
+     },
+     {
+      "tag": "#P114",
+      "name": "Enemy 114",
+      "town_hall": 18,
+      "map_position": 11,
+      "attacks": []
+     },
+     {
+      "tag": "#P115",
+      "name": "Enemy 115",
+      "town_hall": 17,
+      "map_position": 12,
+      "attacks": []
+     },
+     {
+      "tag": "#P116",
+      "name": "Enemy 116",
+      "town_hall": 18,
+      "map_position": 13,
+      "attacks": [
+       {
+        "defender_tag": "#P020",
+        "stars": 3,
+        "destruction": 100
+       }
+      ]
+     },
+     {
+      "tag": "#P117",
+      "name": "Enemy 117",
+      "town_hall": 16,
+      "map_position": 19,
+      "attacks": [
+       {
+        "defender_tag": "#P018",
+        "stars": 1,
+        "destruction": 70
+       }
+      ]
+     },
+     {
+      "tag": "#P118",
+      "name": "Enemy 118",
+      "town_hall": 16,
+      "map_position": 22,
+      "attacks": [
+       {
+        "defender_tag": "#P022",
+        "stars": 2,
+        "destruction": 60
+       }
+      ]
+     },
+     {
+      "tag": "#P119",
+      "name": "Enemy 119",
+      "town_hall": 15,
+      "map_position": 24,
+      "attacks": [
+       {
+        "defender_tag": "#P026",
+        "stars": 2,
+        "destruction": 62
+       }
+      ]
+     },
+     {
+      "tag": "#P120",
+      "name": "Enemy 120",
+      "town_hall": 15,
+      "map_position": 25,
+      "attacks": []
+     },
+     {
+      "tag": "#P121",
+      "name": "Enemy 121",
+      "town_hall": 14,
+      "map_position": 27,
+      "attacks": [
+       {
+        "defender_tag": "#P028",
+        "stars": 2,
+        "destruction": 64
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

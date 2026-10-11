@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Local secrets - never commit
+.env
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated output (charts, debug CSV/JSON)
+output/
+output_*/
+*.png
+!docs/**/*.png
+
+# Cached API dumps - contain real player names and clan data
+live_data.json
+data/
+
+# Tooling
+.pytest_cache/
+.coverage
+.ruff_cache/
+.idea/
+.vscode/

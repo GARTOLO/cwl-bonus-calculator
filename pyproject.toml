@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cwl-bonus-calculator"
+version = "1.0.0"
+description = "Fair, configurable Clash of Clans CWL bonus calculator that reads straight from the official API - no CSV exports."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "GARTOLO" }]
+keywords = ["clash-of-clans", "cwl", "clan-war-league", "bonus", "coc"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Games/Entertainment",
+]
+# Pinned: coc.py 4.x, pandas 3.x and matplotlib 3.11 all changed behaviour across
+# majors, so an unpinned install resolves to different code than the one tested.
+dependencies = [
+  "coc.py==4.0.0",
+  "pandas>=2.2,<4",
+  "matplotlib>=3.8,<4",
+  "tabulate>=0.9,<1",
+  "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+cwl-bonus = "cwlbonus.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/GARTOLO/cwl-bonus-calculator"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+cwlbonus = ["locales/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
