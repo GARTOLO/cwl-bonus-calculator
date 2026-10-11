@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-102%20passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/tests-109%20passing-brightgreen?style=for-the-badge)](tests/)
 
 [English](README.md) · [Español](README.es.md)
 
@@ -37,7 +37,7 @@ It exists because a scoring formula is only fair if you can see what it rewards.
 - 🛡️ **Optional defensive score**, off by default, measured per defence so being attacked more is not automatically worth more.
 - 🌍 **i18n from day one.** English and Spanish ship now; adding a language is one JSON file.
 - 📊 **Infographic output** with the bonus zone shaded, medals, per-player stats, and the margin to the bonus cut.
-- ✅ **102 tests**, including regressions against a real 7-round season.
+- ✅ **109 tests**, including regressions against a real 7-round season.
 
 ## How the scoring works
 
@@ -57,25 +57,53 @@ Full rationale, worked examples and the measurements behind the defaults: **[doc
 
 ## Installation
 
-Requires Python 3.10 or newer.
+Requires Python 3.10 or newer. Python 3.11–3.13 have the widest wheel coverage if a dependency ever fails to build.
+
+There are two ways in. Both need the dependencies; only the second installs the package itself.
+
+**Option A — run it straight from the checkout:**
 
 ```bash
 git clone https://github.com/GARTOLO/cwl-bonus-calculator.git
 cd cwl-bonus-calculator
-python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -e .
+python3 -m venv .venv          # then activate it, see the table below
+pip install -r requirements.txt
+python run.py --bonuses 7
 ```
 
-Or with plain requirements:
+**Option B — install it properly:**
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
+cwl-bonus --bonuses 7          # or: python -m cwlbonus --bonuses 7
 ```
+
+### Activating the virtualenv
+
+The command depends on your **shell**, not your operating system:
+
+| Shell | Command |
+|---|---|
+| Linux / macOS (bash, zsh) | `source .venv/bin/activate` |
+| Windows PowerShell | `.\.venv\Scripts\Activate.ps1` |
+| Windows cmd.exe | `.venv\Scripts\activate.bat` |
+| Windows Git Bash | `source .venv/Scripts/activate` |
+
+`source` is a bash builtin — in PowerShell or cmd it is not a command at all, and on Windows the activate script is a `.ps1` or `.bat` file rather than `Scripts/activate`. If PowerShell refuses to run it, allow it for this session only:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+You do not need the venv activated if the dependencies are already installed: `python run.py ...` works from a plain terminal.
 
 ## Configuration
 
-Create a CoC developer account at <https://developer.clashofclans.com> (free) and generate an API key. **One key is bound to one IP address** — if you run the tool from a different network, make a new key.
+Create a free developer account at <https://developer.clashofclans.com>. Your clan's Supercell ID is not involved.
+
+**You do not need to create an API key yourself.** The client logs in with your account credentials, discovers your current public IP, and creates and rotates the keys for you — and if your IP changes mid-run it repairs itself and retries automatically. Just put the account email and password in `.env`.
+
+One caveat: the developer site allows a **maximum of 10 keys per account**. If you have already created ten by hand, delete a couple so there is room.
 
 ```bash
 cp .env.example .env
@@ -90,6 +118,8 @@ CLAN_TAG="%232PP0JCCCV"              # "#2PP0JCCCV" works too
 `.env` is gitignored. Never commit it.
 
 ## Usage
+
+`cwl-bonus` below is the installed entry point. Running from the checkout instead, use `python run.py` with the same flags.
 
 ```bash
 cwl-bonus                            # 7 bonuses, English, default weights
@@ -177,7 +207,7 @@ cp src/cwlbonus/locales/en.json src/cwlbonus/locales/xx.json
 
 ```bash
 pip install -e ".[dev]"
-pytest                             # 102 tests
+pytest                             # 109 tests
 pytest tests/test_scoring.py -v    # just the scoring rules
 ```
 
@@ -194,7 +224,7 @@ Honest ones, so you can decide whether they matter for your clan:
 - **Only the current or just-finished season.** The official API does not expose past league groups, so re-checking last month's bonuses is not possible.
 - **Cumulative totals, not averages.** A player who joined in round 6 cannot out-rank a seven-round regular. That is intentional — use `--min-wars` if you want it enforced explicitly rather than implicitly.
 - **Team size is whatever the API returns.** 15v15 and 30v30 both work; the chart shows the top 30.
-- **The API key is IP-bound.** A hosted deployment needs a key created for the host's IP.
+- **The IP binding is handled for you.** The client creates a key for whatever IP it runs from, so a hosted deployment works — it just needs the account credentials in the environment. The developer site caps an account at 10 keys.
 - **Defence scoring stays a policy choice.** In CWL, being attacked often is partly a compliment, so neither "reward volume" nor "reward efficiency" is unambiguously right. The tool measures efficiency and leaves the decision to you.
 
 ## Contributing

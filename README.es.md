@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-102%20passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/tests-109%20passing-brightgreen?style=for-the-badge)](tests/)
 
 [English](README.md) · [Español](README.es.md)
 
@@ -37,7 +37,7 @@ Existe porque una fórmula solo es justa si se ve qué premia. Cada peso es conf
 - 🛡️ **Puntuación defensiva opcional**, desactivada por defecto, medida por defensa para que recibir más ataques no valga automáticamente más.
 - 🌍 **i18n desde el primer día.** Inglés y español disponibles; añadir un idioma es un fichero JSON.
 - 📊 **Infografía** con la zona de bono sombreada, medallas, estadísticas por jugador y el margen con el puesto de corte.
-- ✅ **102 tests**, incluidos tests de regresión contra una temporada real de 7 rondas.
+- ✅ **109 tests**, incluidos tests de regresión contra una temporada real de 7 rondas.
 
 ## Cómo funciona la puntuación
 
@@ -57,25 +57,53 @@ Razonamiento completo, ejemplos y las mediciones detrás de los valores por defe
 
 ## Instalación
 
-Requiere Python 3.10 o superior.
+Requiere Python 3.10 o superior. Python 3.11–3.13 tienen la mayor cobertura de wheels si alguna dependencia falla al compilar.
+
+Hay dos formas de entrar. Las dos necesitan las dependencias; solo la segunda instala el paquete.
+
+**Opción A — ejecutarlo directamente desde el repositorio:**
 
 ```bash
 git clone https://github.com/GARTOLO/cwl-bonus-calculator.git
 cd cwl-bonus-calculator
-python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -e .
+python3 -m venv .venv          # luego actívalo, ver la tabla de abajo
+pip install -r requirements.txt
+python run.py --bonuses 7
 ```
 
-O con requirements:
+**Opción B — instalarlo de verdad:**
 
 ```bash
-pip install -r requirements.txt
+pip install -e .
+cwl-bonus --bonuses 7          # o: python -m cwlbonus --bonuses 7
 ```
+
+### Activar el entorno virtual
+
+El comando depende de tu **shell**, no de tu sistema operativo:
+
+| Shell | Comando |
+|---|---|
+| Linux / macOS (bash, zsh) | `source .venv/bin/activate` |
+| Windows PowerShell | `.\.venv\Scripts\Activate.ps1` |
+| Windows cmd.exe | `.venv\Scripts\activate.bat` |
+| Windows Git Bash | `source .venv/Scripts/activate` |
+
+`source` es un builtin de bash — en PowerShell o cmd no es un comando, y en Windows el script de activación es un fichero `.ps1` o `.bat`, no `Scripts/activate`. Si PowerShell se niega a ejecutarlo, permítelo solo para esa sesión:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+No necesitas activar el entorno si las dependencias ya están instaladas: `python run.py ...` funciona desde una terminal normal.
 
 ## Configuración
 
-Crea una cuenta de desarrollador en <https://developer.clashofclans.com> (gratis) y genera una clave de API. **Cada clave está ligada a una dirección IP** — si ejecutas la herramienta desde otra red, crea una clave nueva.
+Crea una cuenta de desarrollador gratis en <https://developer.clashofclans.com>. Tu Supercell ID del clan no interviene.
+
+**No necesitas crear ninguna clave de API a mano.** El cliente inicia sesión con las credenciales de tu cuenta, descubre tu IP pública actual y crea y rota las claves por ti — y si tu IP cambia a mitad de ejecución, se repara solo y reintenta la petición. Solo tienes que poner el correo y la contraseña de la cuenta en `.env`.
+
+Un aviso: la web de desarrolladores permite un **máximo de 10 claves por cuenta**. Si ya has creado diez a mano, borra un par para hacer sitio.
 
 ```bash
 cp .env.example .env
@@ -90,6 +118,8 @@ CLAN_TAG="%232PP0JCCCV"              # "#2PP0JCCCV" también funciona
 `.env` está en el .gitignore. No lo subas nunca.
 
 ## Uso
+
+`cwl-bonus` es el ejecutable instalado. Si lo ejecutas desde el repositorio, usa `python run.py` con las mismas opciones.
 
 ```bash
 cwl-bonus --lang es                  # 7 bonos, salida en español
@@ -176,7 +206,7 @@ cp src/cwlbonus/locales/en.json src/cwlbonus/locales/xx.json
 
 ```bash
 pip install -e ".[dev]"
-pytest                             # 102 tests
+pytest                             # 109 tests
 pytest tests/test_scoring.py -v    # solo las reglas de puntuación
 ```
 
@@ -193,7 +223,7 @@ Honestos, para que decidas si te afectan:
 - **Solo la temporada actual o recién terminada.** La API oficial no expone grupos de liga pasados, así que no se pueden revisar los bonos del mes anterior.
 - **Totales acumulados, no medias.** Quien entró en la ronda 6 no puede superar a un titular de siete rondas. Es intencionado — usa `--min-wars` si quieres que se exija explícitamente y no de forma implícita.
 - **El tamaño de equipo es el que devuelva la API.** Funcionan tanto 15v15 como 30v30; el gráfico muestra hasta 30.
-- **La clave de API está ligada a una IP.** Un despliegue alojado necesita una clave creada para la IP del servidor.
+- **El ligado a IP lo gestiona la herramienta.** El cliente crea una clave para la IP desde la que se ejecute, así que un despliegue alojado funciona — solo necesita las credenciales de la cuenta en el entorno. La web de desarrolladores limita la cuenta a 10 claves.
 - **La puntuación defensiva sigue siendo una decisión política.** En CWL, que te ataquen mucho es en parte un cumplido, así que ni "premiar el volumen" ni "premiar la eficiencia" es indiscutiblemente correcto. La herramienta mide eficiencia y te deja la decisión.
 
 ## Contribuir
