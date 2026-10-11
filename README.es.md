@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-109%20passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/tests-154%20passing-brightgreen?style=for-the-badge)](tests/)
 
 [English](README.md) · [Español](README.es.md)
 
@@ -36,8 +36,8 @@ Existe porque una fórmula solo es justa si se ve qué premia. Cada peso es conf
 - 🧑⚖️ **Reglas de elegibilidad.** Opcionalmente exige un mínimo de guerras para que un suplente de una ronda no le quite el bono a un titular de siete.
 - 🛡️ **Puntuación defensiva opcional**, desactivada por defecto, medida por defensa para que recibir más ataques no valga automáticamente más.
 - 🌍 **i18n desde el primer día.** Inglés y español disponibles; añadir un idioma es un fichero JSON.
-- 📊 **Infografía** con la zona de bono sombreada, medallas, estadísticas por jugador y el margen con el puesto de corte.
-- ✅ **109 tests**, incluidos tests de regresión contra una temporada real de 7 rondas.
+- 📊 **Un leaderboard para compartir.** Una tarjeta por jugador: en esmeralda y brillo para los que entran en el bono, atenuados los demás, medallas en el podio y el margen con el corte. Se lee en el móvil al tamaño del chat. Piel oscura y clara, y el gráfico de barras original sigue disponible con `--style classic`.
+- ✅ **154 tests**, incluidos tests de regresión contra una temporada real de 7 rondas.
 
 ## Cómo funciona la puntuación
 
@@ -158,6 +158,8 @@ El valor por defecto es `balanced` porque, medido contra una temporada real, un 
 | `--output DIR` | `./output` | Carpeta del gráfico y los ficheros de depuración. |
 | `--lang CODE` | auto | Idioma de salida. Tiene prioridad sobre `CWL_LANG`. |
 | `--config FILE` | – | Fichero JSON que sobrescribe cualquier peso. |
+| `--style NAME` | `leaderboard` | Diseño del gráfico: `leaderboard` (lista de tarjetas) o `classic` (el gráfico de barras original). |
+| `--skin NAME` | `dark` | Esquema de color del diseño leaderboard: `dark` o `light`. |
 | `--debug` | desactivado | Escribe la temporada cruda descargada en JSON. |
 | `--list-langs` | – | Muestra los idiomas disponibles y sale. |
 
@@ -182,12 +184,22 @@ Las opciones de línea de comandos tienen prioridad sobre el fichero, que tiene 
 
 ## Salida
 
-`output/ranking_final_api.png` — la infografía, lista para Discord o WhatsApp:
+`output/ranking_final_api.png` — el leaderboard, listo para Discord o WhatsApp:
 
-- zona de bono sombreada, medallas en el podio y el margen con el puesto de corte
-- por jugador: estrellas, ataques usados/guerras jugadas, Ayuntamiento y penalización
-- la fórmula activa impresa en el gráfico, para que nadie tenga que preguntar qué pesos se usaron
-- los empates etiquetados, no ordenados en silencio
+- una tarjeta por jugador: insignia de puesto con medallas en el podio, nombre y puntuación en la misma línea, y `TH · estrellas · ataques · dificultad` subordinado debajo
+- los que entran en el bono van en esmeralda y a pleno brillo; el resto atenuado, así "¿entro o no?" se responde de un vistazo
+- el corte del bono tiene su propia banda con un marcador `CORTE · n BONOS`, y el margen con el corte aparece arriba a la derecha
+- los empates comparten puesto y van etiquetados, nunca ordenados en silencio
+- la fórmula activa se imprime abajo, para que nadie tenga que preguntar qué pesos se usaron
+
+### Estilos del gráfico
+
+`--skin light` dibuja el mismo diseño sobre fondo claro, para chats en modo claro:
+
+![Piel clara](docs/example-chart-light.png)
+
+`--style classic` dibuja en su lugar el gráfico de barras horizontal anterior — útil si un clan
+quiere comparar los dos antes de decidirse.
 
 `output/season_debug.json` — con `--debug`. La temporada completa descargada, para que cualquiera pueda rehacer los números a mano. **Contiene nombres reales de jugadores; no lo subas nunca.**
 
@@ -206,7 +218,7 @@ cp src/cwlbonus/locales/en.json src/cwlbonus/locales/xx.json
 
 ```bash
 pip install -e ".[dev]"
-pytest                             # 109 tests
+pytest                             # 154 tests
 pytest tests/test_scoring.py -v    # solo las reglas de puntuación
 ```
 

@@ -1,9 +1,8 @@
-"""Chart rendering, with the regression that motivated the rewrite.
+"""Tests for the default leaderboard chart.
 
-The original layout put the footer text at a fixed fraction of a figure whose
-height grew with the number of players, so the formula block was clipped for any
-roster below about nine players. These tests measure the rendered text boxes at
-save time and assert they stay inside the image, across the whole range.
+The padding tests exist because the first version of this design drew the score ink
+0.009in from the top of its card and ran the magnitude bar flush to the card's right
+edge — both invisible in the code, obvious in the render.
 """
 from __future__ import annotations
 
@@ -13,10 +12,18 @@ import pytest
 from conftest import result_with
 from matplotlib.figure import Figure
 
-from cwlbonus.chart import fmt, render_chart
+from cwlbonus.chart import SKINS, fmt, render_chart
 from cwlbonus.config import Weights
 from cwlbonus.i18n import Translator
 from cwlbonus.ranking import build_ranking
+
+ROW_CARD_MIN_W = 700     # px at figure dpi: row cards only (bars ~310, pills ~80)
+MIN_INSET_Y = 5.0        # px, ~0.05in clearance above/below the text ink
+MIN_INSET_X = 15.0       # px, ~0.15in clearance left/right of text and bars
+
+
+CUT_LABELS_ES = ("CORTE", "EMPATE")
+CUT_LABELS_EN = ("CUT -", "TIE:")
 
 
 def make_ranking(n: int, *, bonuses: int = 7, tie: bool = False, wars: int = 7,
@@ -29,52 +36,55 @@ def make_ranking(n: int, *, bonuses: int = 7, tie: bool = False, wars: int = 7,
     return build_ranking(result_with(specs), bonuses=bonuses)
 
 
-def drawn_tick_labels(axis, limits):
-    """Tick labels that are actually inside the view interval.
+def measure(fig, cut_labels=CUT_LABELS_EN) -> dict[str, float]:
+    """Clipping extents, card insets and cut-band collisions, in pixels.
 
-    Matplotlib keeps Text objects for ticks just outside the limits; they are not
-    drawn, but their transform still yields a box, which would read as phantom
-    overflow.
+    ``cut_labels`` must match the active language: detecting the band by a Spanish
+    marker while rendering English would find nothing and make the collision
+    assertion pass vacuously.
     """
-    low, high = sorted(limits)
-    return [label for loc, label in zip(axis.get_ticklocs(), axis.get_ticklabels())
-            if low <= loc <= high and label.get_text()]
-
-
-def collect_boxes(fig):
-    """Every visible piece of text, plus legend frames, in display pixels."""
     renderer = fig.canvas.get_renderer()
-    boxes = []
-    for ax in fig.axes:
-        boxes += [t.get_window_extent(renderer) for t in ax.texts]
-        if ax.axison:
-            for axis, limits in ((ax.xaxis, ax.get_xlim()), (ax.yaxis, ax.get_ylim())):
-                boxes += [t.get_window_extent(renderer)
-                          for t in drawn_tick_labels(axis, limits)]
-            for label in (ax.xaxis.label, ax.yaxis.label, ax.title):
-                if label.get_text():
-                    boxes.append(label.get_window_extent(renderer))
-        legend = ax.get_legend()
-        if legend is not None:
-            boxes.append(legend.get_window_extent(renderer))
-    return boxes
+    cards = [p for ax in fig.axes for p in ax.patches
+             if p.get_window_extent(renderer).width > ROW_CARD_MIN_W]
+    boxes = [t.get_window_extent(renderer) for ax in fig.axes for t in ax.texts]
+    boxes += [p.get_window_extent(renderer) for ax in fig.axes for p in ax.patches
+              if p not in cards]
+
+    insets = {"top": 1e9, "bottom": 1e9, "left": 1e9, "right": 1e9}
+    for card in cards:
+        cb = card.get_window_extent(renderer)
+        inside = [b for b in boxes
+                  if b.x0 >= cb.x0 - 1 and b.x1 <= cb.x1 + 1
+                  and b.y0 >= cb.y0 - 1 and b.y1 <= cb.y1 + 1]
+        if not inside:
+            continue
+        insets["top"] = min(insets["top"], min(cb.y1 - b.y1 for b in inside))
+        insets["bottom"] = min(insets["bottom"], min(b.y0 - cb.y0 for b in inside))
+        insets["left"] = min(insets["left"], min(b.x0 - cb.x0 for b in inside))
+        insets["right"] = min(insets["right"], min(cb.x1 - b.x1 for b in inside))
+
+    cut = [t for ax in fig.axes for t in ax.texts
+           if any(marker in t.get_text() for marker in cut_labels)]
+    collisions = sum(1 for lb in cut for card in cards
+                     if lb.get_window_extent(renderer).overlaps(
+                         card.get_window_extent(renderer)))
+
+    return {
+        "min_y0": min(b.y0 for b in boxes), "max_y1": max(b.y1 for b in boxes),
+        "min_x0": min(b.x0 for b in boxes), "max_x1": max(b.x1 for b in boxes),
+        "height": fig.bbox.height, "width": fig.bbox.width,
+        "cut_labels_found": len(cut), "collisions": collisions, **insets,
+    }
 
 
-def render_and_measure(tmp_path, ranking, *, weights=None, t=None, **kwargs):
-    """Renders the chart and returns (path, measured extents in pixels)."""
+def render_and_measure(tmp_path, ranking, *, weights=None, t=None,
+                       cut_labels=CUT_LABELS_EN, **kwargs):
     measured: dict[str, float] = {}
     original = Figure.savefig
 
     def spy(self, *args, **kw):
         self.canvas.draw()
-        boxes = collect_boxes(self)
-        if boxes:
-            measured["min_y0"] = min(b.y0 for b in boxes)
-            measured["max_y1"] = max(b.y1 for b in boxes)
-            measured["min_x0"] = min(b.x0 for b in boxes)
-            measured["max_x1"] = max(b.x1 for b in boxes)
-        measured["height"] = self.bbox.height
-        measured["width"] = self.bbox.width
+        measured.update(measure(self, cut_labels))
         return original(self, *args, **kw)
 
     Figure.savefig = spy
@@ -87,116 +97,97 @@ def render_and_measure(tmp_path, ranking, *, weights=None, t=None, **kwargs):
     return path, measured
 
 
-# ------------------------------------------------------------ the regression
-@pytest.mark.parametrize("n", [1, 2, 3, 5, 8, 9, 10, 12, 15, 20, 30])
-@pytest.mark.parametrize("defense", [False, True])
-def test_nothing_is_clipped_for_any_roster_size(tmp_path, n, defense):
-    """The exact failure the original shipped: a clipped footer on small rosters."""
-    ranking = make_ranking(n, bonuses=min(7, n))
-    _, measured = render_and_measure(tmp_path, ranking,
-                                     weights=Weights(use_defense=defense))
-    assert measured["min_y0"] >= -0.5, f"content clipped at the bottom (n={n})"
-    assert measured["max_y1"] <= measured["height"] + 0.5, f"content clipped (n={n})"
+def rendered_text(tmp_path, ranking, *, weights=None, t=None) -> str:
+    seen: dict[str, str] = {}
+    original = Figure.savefig
+
+    def spy(self, *args, **kw):
+        seen["text"] = " ".join(x.get_text() for ax in self.axes for x in ax.texts)
+        return original(self, *args, **kw)
+
+    Figure.savefig = spy
+    try:
+        render_chart(ranking, weights or Weights(), t or Translator("en"), tmp_path,
+                     clan_name="C", clan_tag="#T", season="2026-10-02", rounds=7)
+    finally:
+        Figure.savefig = original
+    return seen["text"]
 
 
-@pytest.mark.parametrize("n", [1, 3, 9, 15, 30])
-def test_nothing_is_clipped_horizontally(tmp_path, n):
-    """Player names are drawn outside the axes and used to run off the left edge."""
-    _, measured = render_and_measure(tmp_path, make_ranking(n, bonuses=min(7, n)))
-    assert measured["min_x0"] >= -0.5, "content clipped off the left edge"
-    assert measured["max_x1"] <= measured["width"] + 0.5, "content clipped off the right"
+# ------------------------------------------------------ the reported padding bug
+@pytest.mark.parametrize("n", [1, 3, 8, 15, 30])
+def test_nothing_touches_a_card_edge(tmp_path, n):
+    """Text and bars must stay clear of the rounded frame that contains them."""
+    _, m = render_and_measure(tmp_path, make_ranking(n, bonuses=min(7, n)))
+    assert m["top"] >= MIN_INSET_Y, f"text too close to the card top ({m['top']:.1f}px)"
+    assert m["bottom"] >= MIN_INSET_Y, f"text too close to the card bottom ({m['bottom']:.1f}px)"
+    assert m["left"] >= MIN_INSET_X, f"content too close to the card left ({m['left']:.1f}px)"
+    assert m["right"] >= MIN_INSET_X, f"bar/score too close to the card right ({m['right']:.1f}px)"
 
 
-def test_long_player_names_are_given_room(tmp_path):
+def test_magnitude_bar_is_inset_from_the_right_edge(tmp_path):
+    """The specific defect: the bar ran flush to the card's right edge."""
+    _, m = render_and_measure(tmp_path, make_ranking(12, bonuses=7))
+    assert m["right"] >= MIN_INSET_X
+
+
+def test_padding_holds_with_long_names_and_defense(tmp_path):
     ranking = build_ranking(result_with([
-        ("A_Very_Long_Player_Name_Indeed", 30.0, 7),
+        ("A_Very_Long_Player_Name_Indeed_Yes", 30.0, 7),
         ("~sweet_puppy~♥", 20.0, 7)]), bonuses=2)
-    _, measured = render_and_measure(tmp_path, ranking)
-    assert measured["min_x0"] >= -0.5
+    _, m = render_and_measure(tmp_path, ranking, weights=Weights(use_defense=True))
+    assert m["left"] >= MIN_INSET_X and m["right"] >= MIN_INSET_X
+    assert m["top"] >= MIN_INSET_Y and m["bottom"] >= MIN_INSET_Y
 
 
-def test_axis_title_does_not_overlap_the_legend(tmp_path):
-    """The x axis label lives under the plot; the legend must not cover it."""
-    overlaps = []
-    original = Figure.savefig
-
-    def spy(self, *args, **kw):
-        self.canvas.draw()
-        renderer = self.canvas.get_renderer()
-        legends = [ax.get_legend() for ax in self.axes if ax.get_legend() is not None]
-        labels = [ax.xaxis.label for ax in self.axes if ax.xaxis.label.get_text()]
-        for label in labels:
-            lb = label.get_window_extent(renderer)
-            for legend in legends:
-                if lb.overlaps(legend.get_window_extent(renderer)):
-                    overlaps.append((label.get_text(), legend))
-        return original(self, *args, **kw)
-
-    Figure.savefig = spy
-    try:
-        render_chart(make_ranking(15), Weights(use_defense=True), Translator("en"),
-                     tmp_path, clan_name="C", clan_tag="#T", season="2026-10-02",
-                     rounds=7)
-    finally:
-        Figure.savefig = original
-    assert not overlaps, f"the x axis label is covered by the legend: {overlaps}"
+# ------------------------------------------------------------------- geometry
+@pytest.mark.parametrize("n", [1, 2, 3, 5, 8, 9, 10, 12, 15, 20, 30])
+@pytest.mark.parametrize("skin", sorted(SKINS))
+def test_nothing_is_clipped_for_any_roster_size(tmp_path, n, skin):
+    _, m = render_and_measure(tmp_path, make_ranking(n, bonuses=min(7, n)),
+                              weights=Weights(skin=skin))
+    assert m["min_y0"] >= -0.5, f"clipped at the bottom (n={n})"
+    assert m["max_y1"] <= m["height"] + 0.5, f"clipped at the top (n={n})"
+    assert m["min_x0"] >= -0.5, "clipped off the left edge"
+    assert m["max_x1"] <= m["width"] + 0.5, "clipped off the right"
 
 
-def test_footer_and_legend_do_not_overlap(tmp_path):
-    """The legend and the formula block each own a band, so they cannot collide."""
-    ranking = make_ranking(15)
-    overlaps = []
-    original = Figure.savefig
-
-    def spy(self, *args, **kw):
-        self.canvas.draw()
-        renderer = self.canvas.get_renderer()
-        footers = [t for ax in self.axes for t in ax.texts
-                   if "FORMULA" in t.get_text().upper() or "PENAL" in t.get_text().upper()]
-        legends = [ax.get_legend() for ax in self.axes if ax.get_legend() is not None]
-        for foot in footers:
-            fb = foot.get_window_extent(renderer)
-            for legend in legends:
-                lb = legend.get_window_extent(renderer)
-                if fb.overlaps(lb):
-                    overlaps.append((fb, lb))
-        return original(self, *args, **kw)
-
-    Figure.savefig = spy
-    try:
-        render_chart(ranking, Weights(), Translator("en"), tmp_path,
-                     clan_name="Test Clan", clan_tag="#T", season="2026-10-02", rounds=7)
-    finally:
-        Figure.savefig = original
-    assert not overlaps
+@pytest.mark.parametrize(("lang", "labels"), [("en", CUT_LABELS_EN), ("es", CUT_LABELS_ES)])
+def test_cut_band_does_not_overlap_any_card(tmp_path, lang, labels):
+    """The cut label used to be right-aligned on top of the next row's bar."""
+    _, m = render_and_measure(tmp_path, make_ranking(15, bonuses=7),
+                              t=Translator(lang), cut_labels=labels)
+    # Guard against a vacuous pass: the label must actually have been found.
+    assert m["cut_labels_found"] >= 1, f"cut label not detected in {lang}"
+    assert m["collisions"] == 0
 
 
-def test_chart_file_is_written(tmp_path):
-    path, _ = render_and_measure(tmp_path, make_ranking(10))
-    assert path.exists() and path.stat().st_size > 5000
+def test_cut_band_is_omitted_when_everyone_gets_a_bonus(tmp_path):
+    text = rendered_text(tmp_path, make_ranking(3, bonuses=5))
+    assert "CUT -" not in text
+
+
+def test_rows_below_the_cut_are_marked_outside(tmp_path):
+    text = rendered_text(tmp_path, make_ranking(10, bonuses=4))
+    assert "CUT - 4 BONUSES" in text
 
 
 # ------------------------------------------------------------- degenerate input
 def test_all_zero_scores_do_not_warp_the_axis(tmp_path):
-    """The original divided its column positions by a zero maximum."""
-    ranking = make_ranking(5, totals=[0.0] * 5)
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
-        render_and_measure(tmp_path, ranking)
-    bad = [w for w in caught if "singular" in str(w.message).lower()]
-    assert not bad, f"matplotlib complained about a degenerate axis: {bad}"
+        render_and_measure(tmp_path, make_ranking(5, totals=[0.0] * 5))
+    assert not [w for w in caught if "singular" in str(w.message).lower()]
 
 
 def test_empty_ranking_renders(tmp_path):
-    ranking = build_ranking(result_with([]), bonuses=7)
-    path, _ = render_and_measure(tmp_path, ranking)
+    path, _ = render_and_measure(tmp_path, build_ranking(result_with([]), bonuses=7))
     assert path.exists()
 
 
 def test_single_player_renders(tmp_path):
-    path, measured = render_and_measure(tmp_path, make_ranking(1, bonuses=1))
-    assert path.exists()
-    assert measured["min_y0"] >= -0.5
+    path, m = render_and_measure(tmp_path, make_ranking(1, bonuses=1))
+    assert path.exists() and m["min_y0"] >= -0.5
 
 
 def test_more_bonuses_than_players_renders(tmp_path):
@@ -205,70 +196,56 @@ def test_more_bonuses_than_players_renders(tmp_path):
 
 
 # ------------------------------------------------------------------ content
+def test_chart_file_is_written(tmp_path):
+    path, _ = render_and_measure(tmp_path, make_ranking(10))
+    assert path.exists() and path.stat().st_size > 5000
+
+
 def test_tie_is_labelled_in_the_chart(tmp_path):
     ranking = make_ranking(6, bonuses=3, tie=True)
     assert any(rp.tied for rp in ranking.ranked)
-    seen: dict[str, str] = {}
-    original = Figure.savefig
-
-    def spy(self, *args, **kw):
-        seen["labels"] = " ".join(
-            tick.get_text() for ax in self.axes for tick in ax.get_yticklabels())
-        return original(self, *args, **kw)
-
-    Figure.savefig = spy
-    try:
-        render_chart(ranking, Weights(), Translator("en"), tmp_path,
-                     clan_name="C", clan_tag="#T", season="2026-10-02", rounds=7)
-    finally:
-        Figure.savefig = original
-    assert "tie" in seen["labels"].lower()
+    assert "tie" in rendered_text(tmp_path, ranking).lower()
 
 
 def test_localised_chart_uses_the_spanish_catalog(tmp_path):
-    ranking = make_ranking(5)
-    seen: dict[str, str] = {}
-    original = Figure.savefig
-
-    def spy(self, *args, **kw):
-        seen["text"] = " ".join(txt.get_text() for ax in self.axes for txt in ax.texts)
-        return original(self, *args, **kw)
-
-    Figure.savefig = spy
-    try:
-        render_chart(ranking, Weights(), Translator("es"), tmp_path,
-                     clan_name="Clan", clan_tag="#T", season="2026-10-02", rounds=7)
-    finally:
-        Figure.savefig = original
-    assert "PUNTUACIÓN" in seen["text"].upper()
-    assert "penalización" in seen["text"].lower()
+    text = rendered_text(tmp_path, make_ranking(5), t=Translator("es"))
+    assert "BONOS" in text
+    assert "Entra en el bono" in text
 
 
-def test_cut_tie_note_replaces_the_margin_note(tmp_path):
+def test_cut_tie_replaces_the_cut_label(tmp_path):
     ranking = build_ranking(
         result_with([("A", 10.0, 7), ("B", 9.0, 7), ("T1", 8.0, 7), ("T2", 8.0, 7)]),
         bonuses=3)
     assert ranking.has_cut_tie
-    seen: dict[str, str] = {}
-    original = Figure.savefig
-
-    def spy(self, *args, **kw):
-        seen["text"] = " ".join(txt.get_text() for ax in self.axes for txt in ax.texts)
-        return original(self, *args, **kw)
-
-    Figure.savefig = spy
-    try:
-        render_chart(ranking, Weights(), Translator("en"), tmp_path,
-                     clan_name="C", clan_tag="#T", season="2026-10-02", rounds=7)
-    finally:
-        Figure.savefig = original
-    assert "TIE" in seen["text"].upper()
-    assert "T1" in seen["text"] and "T2" in seen["text"]
+    text = rendered_text(tmp_path, ranking)
+    assert "TIE" in text.upper()
+    assert "T1" in text and "T2" in text
 
 
-# -------------------------------------------------------------------- helpers
-def test_fmt_never_emits_negative_zero():
+@pytest.mark.parametrize(("lang", "labels"), [("en", CUT_LABELS_EN), ("es", CUT_LABELS_ES)])
+def test_cut_tie_label_does_not_collide_with_a_card(tmp_path, lang, labels):
+    ranking = build_ranking(
+        result_with([("A", 10.0, 7), ("B", 9.0, 7), ("T1", 8.0, 7), ("T2", 8.0, 7)]),
+        bonuses=3)
+    assert ranking.has_cut_tie
+    _, m = render_and_measure(tmp_path, ranking, t=Translator(lang), cut_labels=labels)
+    assert m["cut_labels_found"] >= 1
+    assert m["collisions"] == 0
+
+
+def test_both_skins_render_to_distinct_files(tmp_path):
+    ranking = make_ranking(8, bonuses=4)
+    dark, _ = render_and_measure(tmp_path, ranking, weights=Weights(skin="dark"),
+                                 filename="d.png")
+    light, _ = render_and_measure(tmp_path, ranking, weights=Weights(skin="light"),
+                                  filename="l.png")
+    assert dark.read_bytes() != light.read_bytes()
+
+
+def test_score_is_formatted_without_negative_zero(tmp_path):
     assert fmt(-0.0) == "0.00"
     assert fmt(-0.001) == "0.00"
     assert fmt(-0.5) == "-0.50"
-    assert fmt(26.495) == "26.50" or fmt(26.495) == "26.49"
+    text = rendered_text(tmp_path, make_ranking(4))
+    assert "-0.00" not in text

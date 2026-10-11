@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-109%20passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/tests-154%20passing-brightgreen?style=for-the-badge)](tests/)
 
 [English](README.md) · [Español](README.es.md)
 
@@ -36,8 +36,8 @@ It exists because a scoring formula is only fair if you can see what it rewards.
 - 🧑⚖️ **Eligibility rules.** Optionally require a minimum number of wars so a one-round substitute cannot take a bonus from a seven-round regular.
 - 🛡️ **Optional defensive score**, off by default, measured per defence so being attacked more is not automatically worth more.
 - 🌍 **i18n from day one.** English and Spanish ship now; adding a language is one JSON file.
-- 📊 **Infographic output** with the bonus zone shaded, medals, per-player stats, and the margin to the bonus cut.
-- ✅ **109 tests**, including regressions against a real 7-round season.
+- 📊 **A shareable leaderboard.** One card per player: emerald and bright for the ones who get a bonus, dimmed for the rest, medals on the podium, and the margin to the cut. Reads on a phone at chat-app size. Dark and light skins, and the original bar chart is still available as `--style classic`.
+- ✅ **154 tests**, including regressions against a real 7-round season.
 
 ## How the scoring works
 
@@ -159,6 +159,8 @@ The default is `balanced` because, measured against a real season, difficulty we
 | `--output DIR` | `./output` | Where the chart and debug files go. |
 | `--lang CODE` | auto | Output language. Overrides `CWL_LANG`. |
 | `--config FILE` | – | JSON file overriding any weight. |
+| `--style NAME` | `leaderboard` | Chart design: `leaderboard` (card list) or `classic` (original bar chart). |
+| `--skin NAME` | `dark` | Colour scheme for the leaderboard design: `dark` or `light`. |
 | `--debug` | off | Write the raw fetched season to JSON. |
 | `--list-langs` | – | Show available languages and exit. |
 
@@ -183,12 +185,22 @@ CLI flags override the file, which overrides the preset.
 
 ## Output
 
-`output/ranking_final_api.png` — the infographic, ready for Discord or WhatsApp:
+`output/ranking_final_api.png` — the leaderboard, ready for Discord or WhatsApp:
 
-- bonus zone shaded, medals on the podium, and the margin to the bonus cut
-- per-player stars, attacks used/wars played, Town Hall, and any penalty
-- the active formula printed on the chart, so nobody has to ask which weights were used
-- tied players labelled, not silently ordered
+- one card per player: rank badge with medals on the podium, name and score on one line, and `TH · stars · attacks · difficulty` subordinate underneath
+- recipients are emerald with full-brightness text; everyone else is dimmed, so "am I in?" is answered at a glance
+- the bonus cut gets its own band with a `CUT - n BONUSES` marker, and the margin to the cut sits at the top right
+- tied players share a rank and are labelled, never silently ordered
+- the active formula is printed at the bottom, so nobody has to ask which weights were used
+
+### Chart styles
+
+`--skin light` renders the same layout on a light background for light-mode chats:
+
+![Light skin](docs/example-chart-light.png)
+
+`--style classic` draws the previous horizontal bar chart instead — useful when a clan
+wants to compare the two side by side before settling on one.
 
 `output/season_debug.json` — with `--debug`. The full fetched season, so anyone can re-derive the numbers by hand. **Contains real player names; never commit it.**
 
@@ -207,7 +219,7 @@ cp src/cwlbonus/locales/en.json src/cwlbonus/locales/xx.json
 
 ```bash
 pip install -e ".[dev]"
-pytest                             # 109 tests
+pytest                             # 154 tests
 pytest tests/test_scoring.py -v    # just the scoring rules
 ```
 

@@ -15,6 +15,11 @@ PRESET_STARS = "stars"
 PRESET_BALANCED = "balanced"
 PRESET_HARD_TARGET = "hard-target"
 
+#: Chart designs. "classic" is the original bar chart, kept behind --style.
+STYLES = ("leaderboard", "classic")
+#: Colour schemes for the default leaderboard style.
+SKINS = ("dark", "light")
+
 
 @dataclass
 class Weights:
@@ -62,6 +67,12 @@ class Weights:
     no_defense_policy: str = "neutral"
 
     # --- presentation ------------------------------------------------------
+    # Which chart design to draw. "leaderboard" is the card list (default);
+    # "classic" is the original bar chart, kept for comparison.
+    style: str = "leaderboard"
+    # Colour scheme for the leaderboard style.
+    skin: str = "dark"
+
     # Display floor only. Keeps a heavy penalty visible instead of clipping it
     # to 0 (which is what made a no-show tie with an honest zero).
     total_floor: float | None = -10.0
@@ -76,6 +87,10 @@ class Weights:
         if self.no_defense_policy not in ("neutral", "min", "max"):
             raise ValueError(
                 f"no_defense_policy must be neutral|min|max, got {self.no_defense_policy!r}")
+        if self.style not in STYLES:
+            raise ValueError(f"style must be one of {sorted(STYLES)}, got {self.style!r}")
+        if self.skin not in SKINS:
+            raise ValueError(f"skin must be one of {sorted(SKINS)}, got {self.skin!r}")
 
     def to_dict(self) -> dict:
         d = asdict(self)

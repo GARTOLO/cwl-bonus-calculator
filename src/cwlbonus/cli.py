@@ -15,7 +15,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from . import __version__
-from .config import PRESETS, Weights, resolve_weights
+from .chart import render_chart
+from .chart_classic import render_chart as render_chart_classic
+from .config import PRESETS, SKINS, STYLES, Weights, resolve_weights
 from .fetch import FetchError, dump_season, fetch_season, normalise_tag
 from .i18n import Translator, available_languages, resolve_lang
 from .ranking import build_ranking
@@ -51,6 +53,8 @@ def build_parser(t: Translator) -> argparse.ArgumentParser:
     parser.add_argument("--no-defense-policy", dest="no_defense_policy", default=None,
                         choices=["neutral", "min", "max"], help=t("cli.no_defense_policy"))
     parser.add_argument("--config", default=None, help=t("cli.config"))
+    parser.add_argument("--style", choices=list(STYLES), default=None, help=t("cli.style"))
+    parser.add_argument("--skin", choices=list(SKINS), default=None, help=t("cli.skin"))
     parser.add_argument("--debug", action="store_true", help=t("cli.debug"))
     parser.add_argument("--list-langs", action="store_true", help=t("cli.list_langs"))
     return parser
@@ -64,6 +68,8 @@ def _weights_from_args(args, t: Translator) -> Weights:
         "difficulty": args.difficulty,
         "rusher_max_cut": args.rusher_cap,
         "no_defense_policy": args.no_defense_policy,
+        "style": args.style,
+        "skin": args.skin,
     }
     return resolve_weights(preset=args.preset, config_path=args.config, overrides=overrides)
 
@@ -112,9 +118,10 @@ async def _run(args, weights: Weights, t: Translator) -> int:
     print()
     print(build_report(ranking, result, weights, t))
 
-    chart_path = render_chart(ranking, weights, t, args.output,
-                              clan_name=season.clan_name, clan_tag=season.clan_tag,
-                              season=season.season, rounds=result.wars_processed)
+    chart_path = (render_chart_classic if weights.style == "classic" else render_chart)(
+        ranking, weights, t, args.output,
+        clan_name=season.clan_name, clan_tag=season.clan_tag,
+        season=season.season, rounds=result.wars_processed)
     print()
     print(t("log.chart_saved", path=chart_path))
 
