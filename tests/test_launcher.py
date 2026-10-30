@@ -79,3 +79,16 @@ def test_launcher_flags_do_not_need_credentials(flag):
     result = run_launcher(flag)
     assert result.returncode == 0, result.stderr
     assert "COC_EMAIL" not in result.stderr
+
+
+def test_region_language_code_is_not_reported_as_unknown():
+    result = run_launcher("--lang", "en-US", "--help")
+    assert result.returncode == 0, result.stderr
+    assert "Unknown language" not in result.stderr
+
+
+def test_missing_config_file_is_reported_without_a_traceback(tmp_path):
+    result = run_launcher("--config", str(tmp_path / "missing.json"))
+    assert result.returncode == 1
+    assert "cannot read config file" in result.stderr.lower()
+    assert "Traceback" not in result.stderr

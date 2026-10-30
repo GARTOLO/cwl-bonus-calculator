@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-154%20passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/tests-183%20passing-brightgreen?style=for-the-badge)](tests/)
 
 [English](README.md) · [Español](README.es.md)
 
@@ -37,7 +37,7 @@ It exists because a scoring formula is only fair if you can see what it rewards.
 - 🛡️ **Optional defensive score**, off by default, measured per defence so being attacked more is not automatically worth more.
 - 🌍 **i18n from day one.** English and Spanish ship now; adding a language is one JSON file.
 - 📊 **A shareable leaderboard.** One card per player: emerald and bright for the ones who get a bonus, dimmed for the rest, medals on the podium, and the margin to the cut. Reads on a phone at chat-app size. Dark and light skins, and the original bar chart is still available as `--style classic`.
-- ✅ **154 tests**, including regressions against a real 7-round season.
+- ✅ **183 tests**, including regressions against a real 7-round season.
 
 ## How the scoring works
 
@@ -219,7 +219,7 @@ cp src/cwlbonus/locales/en.json src/cwlbonus/locales/xx.json
 
 ```bash
 pip install -e ".[dev]"
-pytest                             # 154 tests
+pytest                             # 183 tests
 pytest tests/test_scoring.py -v    # just the scoring rules
 ```
 
@@ -234,6 +234,7 @@ python tools/make_fixture.py my_season.json tests/fixtures/season_sample.json
 Honest ones, so you can decide whether they matter for your clan:
 
 - **Only the current or just-finished season.** The official API does not expose past league groups, so re-checking last month's bonuses is not possible.
+- **Only completed rounds are scored.** If you run mid-round, the round still in progress is skipped rather than charging its pending attacks as misses; run again once it ends.
 - **Cumulative totals, not averages.** A player who joined in round 6 cannot out-rank a seven-round regular. That is intentional — use `--min-wars` if you want it enforced explicitly rather than implicitly.
 - **Team size is whatever the API returns.** 15v15 and 30v30 both work; the chart shows the top 30.
 - **The IP binding is handled for you.** The client creates a key for whatever IP it runs from, so a hosted deployment works — it just needs the account credentials in the environment. The developer site caps an account at 10 keys.

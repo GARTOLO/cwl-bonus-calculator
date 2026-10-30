@@ -20,7 +20,7 @@
   "cli.config": "Path to a JSON config file overriding individual weights.",
   "cli.style": "Chart design: leaderboard (default card list) or classic (original bar chart).",
   "cli.skin": "Colour scheme for the leaderboard design: dark (default) or light.",
-  "cli.debug": "Write per-attack debug detail to the output directory.",
+  "cli.debug": "Write the raw fetched season to JSON for auditing.",
   "cli.rusher_cap": "Maximum Town Hall levels the rushed-base correction may remove (default: 2).",
   "cli.list_langs": "List the available output languages and exit.",
 
@@ -40,6 +40,7 @@
   "error.no_group": "Could not read the league group for this clan.",
   "error.no_data": "No CWL data could be retrieved.",
   "error.no_players": "No player took part in a war this season, so there is nothing to rank.",
+  "error.no_completed_wars": "No completed wars yet. Run again once a round has finished.",
   "error.unknown_lang": "Unknown language '{lang}'. Falling back to English.",
   "error.cancelled": "Cancelled by the user.",
 
@@ -67,6 +68,7 @@
   "warn.tie_at_cut": "TIE AT THE BONUS CUT - {players} all scored {score}. With {bonuses} bonuses this needs a human decision.",
   "warn.ineligible": "{count} player(s) played fewer than {min_wars} war(s) and are marked ineligible.",
   "warn.rusher_correction": "{count} opponent base(s) were corrected downwards as rushed bases.",
+  "warn.skipped": "{count} war(s) were not scored because they are unfinished or have no lineup.",
   "warn.empty_season": "This league has no completed wars yet.",
 
   "chart.bonus_zone": "Bonus zone",
@@ -84,11 +86,15 @@
 
   "v2.league": "CWL",
   "v2.rounds": "{rounds} rounds",
+  "v2.rounds_one": "1 round",
   "v2.bonus_pill": "{n} BONUSES",
+  "v2.bonus_pill_one": "1 BONUS",
   "v2.players_pill": "{n} players",
+  "v2.players_pill_one": "1 player",
   "v2.weight_pill": "difficulty {weight}",
   "v2.cut_margin": "margin to the cut: {margin}",
   "v2.cut_band": "CUT - {n} BONUSES",
+  "v2.cut_band_one": "CUT - 1 BONUS",
   "v2.attacks_short": "attacks",
   "v2.difficulty_short": "dif",
   "v2.missed_one": "missed attack",

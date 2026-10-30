@@ -16,6 +16,8 @@ import matplotlib
 matplotlib.use("Agg")  # headless: charts go straight to disk
 import matplotlib.pyplot as plt
 
+from .formatting import fmt, fmt_signed
+
 PALETTE = {
     "base": "#f4f6fb", "mantle": "#e7ebf3", "surface": "#ffffff",
     "overlay": "#c9d2e0", "grid": "#dde3ee", "text": "#2b3a55",
@@ -42,13 +44,6 @@ PLOT_LEFT_MAX = 0.36
 PLOT_RIGHT = 0.975
 
 
-def fmt(value: float, decimals: int = 2) -> str:
-    """Number formatting that never emits '-0.00'."""
-    if abs(value) < 10 ** (-decimals) / 2:
-        value = 0.0
-    return f"{value:.{decimals}f}"
-
-
 def _formula_lines(t, w) -> list[tuple[str, str]]:
     lo, hi = w.difficulty_clamp
     lines = [
@@ -69,14 +64,24 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
                  filename: str = "ranking_final_api.png") -> Path:
     rows = ranking.ranked[:MAX_ROWS]
     n = len(rows)
-    bonus_count = max(0, min(ranking.bonuses, n))
+    bonus_count = sum(1 for rp in rows if rp.gets_bonus)
+    last_in = max((i for i, rp in enumerate(rows) if rp.gets_bonus), default=-1)
 
     # Ascending order so the best player sits at the top of a barh plot.
     plot = list(reversed(rows))
     scores = [rp.player.total for rp in rows]
-    max_score = max(scores) if scores else 0.0
-    for_zero = max_score <= 0.0
-    scale = max_score if not for_zero else 1.0
+    # The bars show attack (plus defence) points, which can exceed the total when
+    # a missed-attack penalty is charged. The axis must fit both, or a bar runs
+    # into its own stat column.
+    bars = [rp.player.attack_points
+            + (rp.player.defense_points if weights.use_defense else 0.0)
+            for rp in rows]
+    max_score = max(scores, default=0.0)
+    max_bar = max(bars, default=0.0)
+    scale = max(max_score, max_bar)
+    for_zero = scale <= 0.0
+    if for_zero:
+        scale = 1.0
 
     formula = _formula_lines(t, weights)
     axes_h = max(MIN_AXES_IN, ROW_H_IN * max(n, 3))
@@ -123,21 +128,22 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
         y = list(range(n))
         ylim_lo, ylim_hi = -0.75, n - 0.25
 
-        if bonus_count > 0:
-            ax.axhspan(n - bonus_count - 0.5, ylim_hi, color=PALETTE["green"],
+        if last_in >= 0:
+            cut_y = n - last_in - 1.5
+            ax.axhspan(cut_y, ylim_hi, color=PALETTE["green"],
                        alpha=0.09, zorder=0)
-            ax.axhspan(ylim_lo, n - bonus_count - 0.5, color=PALETTE["mantle"],
+            ax.axhspan(ylim_lo, cut_y, color=PALETTE["mantle"],
                        alpha=0.75, zorder=0)
 
         atk = [rp.player.attack_points for rp in plot]
-        colors = [PALETTE["blue"] if i >= n - bonus_count else PALETTE["gray"]
-                  for i in range(n)]
+        colors = [PALETTE["blue"] if rp.gets_bonus else PALETTE["gray"]
+                  for rp in plot]
         ax.barh(y, atk, color=colors, height=0.62, edgecolor=PALETTE["base"],
                 linewidth=0.8, zorder=3)
         if weights.use_defense:
             defense = [rp.player.defense_points for rp in plot]
-            dcol = [PALETTE["red"] if i >= n - bonus_count else "#d9b0a6"
-                    for i in range(n)]
+            dcol = [PALETTE["red"] if rp.gets_bonus else "#d9b0a6"
+                    for rp in plot]
             ax.barh(y, defense, left=atk, color=dcol, height=0.62,
                     edgecolor=PALETTE["base"], linewidth=0.8, zorder=3)
 
@@ -160,7 +166,7 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
                     fontweight="bold", color=colour, zorder=5)
 
         for i, rp in enumerate(plot):
-            inside = i >= n - bonus_count
+            inside = rp.gets_bonus
             colour = PALETTE["text"] if inside else PALETTE["subtext"]
             p = rp.player
             ax.text(x_total, i, fmt(p.total), ha="left", va="center", fontsize=11.5,
@@ -180,13 +186,17 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
         labels = []
         for rp in plot:
             label = f"{rp.rank}\u00ba   {rp.player.name}"
+            if not rp.eligible:
+                label += f"  ({t('table.status_ineligible')})"
             if rp.tied:
                 label += f"  ({t('table.note_tie')})"
             labels.append(label)
         ax.set_yticks(y)
         ax.set_yticklabels(labels, fontsize=12)
         for tick, rp in zip(ax.get_yticklabels(), plot):
-            if rp.rank in MEDALS and not rp.tied:
+            if not rp.eligible:
+                tick.set_color(PALETTE["subtext"])
+            elif rp.rank in MEDALS and not rp.tied:
                 tick.set_color(MEDALS[rp.rank])
                 tick.set_fontweight("bold")
             elif rp.tied:
@@ -198,20 +208,21 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
                 tick.set_color(PALETTE["subtext"])
 
         # ---- bonus cut line ----------------------------------------------
-        if 0 < bonus_count < len([r for r in rows if r.eligible]):
-            cut_y = n - bonus_count - 0.5
+        if 0 <= last_in < n - 1:
+            cut_y = n - last_in - 1.5
             ax.axhline(y=cut_y, color=PALETTE["peach"], linestyle=(0, (6, 4)),
                        linewidth=2.2, alpha=0.9, zorder=4)
+            first_out = next((rp for rp in rows[last_in + 1:] if rp.eligible), None)
             margin = ranking.cut_margin if ranking.cut_margin is not None else 0.0
-            note = t("chart.cut", n=bonus_count, next=bonus_count + 1,
-                     margin=f"{margin:+.2f}")
+            note = t("chart.cut", n=bonus_count,
+                     next=first_out.rank if first_out else last_in + 2,
+                     margin=fmt_signed(margin))
             if ranking.has_cut_tie:
-                note = t("warn.tie_at_cut", players=", ".join(ranking.cut_tie),
-                         score=fmt(ranking.cut_tie_score or 0.0),
-                         bonuses=bonus_count)
-            ax.text(scale * 0.985, cut_y - 0.12, note, ha="right", va="top", fontsize=10.5,
+                note = t("warn.tie_at_cut_short", players=" / ".join(ranking.cut_tie),
+                         score=fmt(ranking.cut_tie_score or 0.0))
+            ax.text(scale * 1.58, cut_y, note, ha="right", va="center", fontsize=9.8,
                     fontweight="bold", color=PALETTE["peach"], zorder=5,
-                    bbox={"boxstyle": "round,pad=0.35", "facecolor": PALETTE["base"],
+                    bbox={"boxstyle": "round,pad=0.30", "facecolor": PALETTE["base"],
                           "edgecolor": PALETTE["peach"], "linewidth": 1.2, "alpha": 0.95})
 
         if for_zero:

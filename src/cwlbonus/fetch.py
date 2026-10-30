@@ -23,7 +23,7 @@ class FetchError(Exception):
 
 def normalise_tag(raw: str) -> str:
     """Accepts '#ABC', 'ABC' or the URL-encoded '%23ABC' from a .env file."""
-    tag = (raw or "").replace("%23", "#").replace("%23", "#").strip().strip('"').strip("'")
+    tag = (raw or "").replace("%23", "#").strip().strip('"').strip("'").strip().upper()
     if not tag:
         raise FetchError("error.missing_env", vars="CLAN_TAG")
     return tag if tag.startswith("#") else f"#{tag}"
@@ -40,9 +40,14 @@ def _member(raw) -> Member:
     )
 
 
-def _side(clan, clan_tag: str) -> WarSide:
+def _side(clan) -> WarSide:
     return WarSide(clan_tag=clan.tag, clan_name=clan.name,
                    members=[_member(m) for m in clan.members])
+
+
+def _state(raw) -> str:
+    """Stores the API value ('warEnded'), not the enum's display name."""
+    return str(getattr(raw, "value", raw))
 
 
 async def _probe_private_war_log(client, clan_tag: str) -> bool:
@@ -99,10 +104,12 @@ async def fetch_season(client: coc.Client, clan_tag: str) -> Season:
                     # only contains rounds that have already started.
                     number_of_rounds=getattr(group, "number_of_rounds", len(group.rounds)))
 
+    attempted = 0
     for round_index, war_tags in enumerate(group.rounds):
         for war_tag in war_tags:
             if war_tag == "#0":
                 continue
+            attempted += 1
             try:
                 league_war = await client.get_league_war(war_tag)
             except coc.NotFound:
@@ -115,8 +122,12 @@ async def fetch_season(client: coc.Client, clan_tag: str) -> Season:
             theirs = league_war.opponent if league_war.clan.tag == tag else league_war.clan
             season.wars.append(War(
                 round_index=round_index, war_tag=war_tag,
-                state=str(getattr(league_war, "state", "")),
-                mine=_side(mine, tag), theirs=_side(theirs, theirs.tag)))
+                state=_state(getattr(league_war, "state", "")),
+                mine=_side(mine), theirs=_side(theirs)))
+    if attempted and not season.wars:
+        # Every request failed or returned another clan's war: that is an API
+        # problem, not a clan that simply has no players.
+        raise FetchError("error.no_data")
     return season
 
 

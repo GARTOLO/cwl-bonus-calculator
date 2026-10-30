@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-154%20passing-brightgreen?style=for-the-badge)](tests/)
+[![Tests](https://img.shields.io/badge/tests-183%20passing-brightgreen?style=for-the-badge)](tests/)
 
 [English](README.md) · [Español](README.es.md)
 
@@ -37,7 +37,7 @@ Existe porque una fórmula solo es justa si se ve qué premia. Cada peso es conf
 - 🛡️ **Puntuación defensiva opcional**, desactivada por defecto, medida por defensa para que recibir más ataques no valga automáticamente más.
 - 🌍 **i18n desde el primer día.** Inglés y español disponibles; añadir un idioma es un fichero JSON.
 - 📊 **Un leaderboard para compartir.** Una tarjeta por jugador: en esmeralda y brillo para los que entran en el bono, atenuados los demás, medallas en el podio y el margen con el corte. Se lee en el móvil al tamaño del chat. Piel oscura y clara, y el gráfico de barras original sigue disponible con `--style classic`.
-- ✅ **154 tests**, incluidos tests de regresión contra una temporada real de 7 rondas.
+- ✅ **183 tests**, incluidos tests de regresión contra una temporada real de 7 rondas.
 
 ## Cómo funciona la puntuación
 
@@ -218,7 +218,7 @@ cp src/cwlbonus/locales/en.json src/cwlbonus/locales/xx.json
 
 ```bash
 pip install -e ".[dev]"
-pytest                             # 154 tests
+pytest                             # 183 tests
 pytest tests/test_scoring.py -v    # solo las reglas de puntuación
 ```
 
@@ -233,6 +233,7 @@ python tools/make_fixture.py mi_temporada.json tests/fixtures/season_sample.json
 Honestos, para que decidas si te afectan:
 
 - **Solo la temporada actual o recién terminada.** La API oficial no expone grupos de liga pasados, así que no se pueden revisar los bonos del mes anterior.
+- **Solo se puntúan las rondas terminadas.** Si lo ejecutas a mitad de ronda, la ronda en curso se omite en vez de contar sus ataques pendientes como fallos; vuelve a ejecutarlo cuando termine.
 - **Totales acumulados, no medias.** Quien entró en la ronda 6 no puede superar a un titular de siete rondas. Es intencionado — usa `--min-wars` si quieres que se exija explícitamente y no de forma implícita.
 - **El tamaño de equipo es el que devuelva la API.** Funcionan tanto 15v15 como 30v30; el gráfico muestra hasta 30.
 - **El ligado a IP lo gestiona la herramienta.** El cliente crea una clave para la IP desde la que se ejecute, así que un despliegue alojado funciona — solo necesita las credenciales de la cuenta en el entorno. La web de desarrolladores limita la cuenta a 10 claves.

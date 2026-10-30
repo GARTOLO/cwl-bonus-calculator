@@ -133,6 +133,30 @@ def test_benched_player_is_not_charged_for_wars_they_missed():
     assert a.total > 0
 
 
+def test_an_unfinished_war_is_skipped_and_never_charges_missed_attacks():
+    """Running mid-round must not turn every pending attack into a penalty."""
+    finished = make_war(0, [member("#A", "A", 17, 1, [("#E1", 3, 100)])],
+                        [member("#E1", "E1", 17, 1, [])])
+    live = make_war(1, [member("#A", "A", 17, 1, [])],
+                    [member("#E1", "E1", 17, 1, [])])
+    live.state = "inWar"
+
+    result = score_season(make_season([finished, live]), Weights())
+    a = next(p for p in result.players if p.tag == "#A")
+    assert result.wars_processed == 1
+    assert a.wars_played == 1
+    assert a.attacks_missed == 0
+    assert a.total == 4.0
+    assert live.war_tag in result.skipped_war_tags
+
+
+def test_a_snapshot_with_the_enum_display_name_is_still_recognised():
+    war = make_war(0, [member("#A", "A", 17, 1, [])], [member("#E1", "E1", 17, 1, [])])
+    war.state = "War Ended"
+    result = score_season(make_season([war]), Weights())
+    assert result.wars_processed == 1
+
+
 def test_late_joiner_who_missed_their_only_attack_is_charged():
     season = make_season([make_war(0, [member("#NEW", "New", 17, 1, [])],
                                    [member("#E1", "E1", 17, 1, [])])])
@@ -253,6 +277,34 @@ def test_no_defense_policy_min_and_max_are_applied():
         ghost_score = next(p for p in result.players if p.tag == "#GHOST")
         assert ghost_score.defense_per_star == expected, policy
         assert ghost_score.defense_policy_applied == policy
+
+
+def test_no_defense_policy_reaches_the_total_and_the_ranking():
+    """A policy that only changes a displayed column would be a silent lie."""
+    ghost = member("#GHOST", "Ghost", 17, 1, [("#E2", 3, 100)])
+    good = member("#GOOD", "Good", 17, 2)
+    bad = member("#BAD", "Bad", 17, 3)
+    enemies = [
+        member("#E1", "E1", 17, 1, [("#GOOD", 0, 50), ("#BAD", 3, 100)]),
+        member("#E2", "E2", 17, 2),
+    ]
+    season = make_season([make_war(0, [ghost, good, bad], enemies)])
+
+    neutral = next(p for p in score_season(
+        season, Weights(use_defense=True, no_defense_policy="neutral")).players
+        if p.tag == "#GHOST")
+    maximum = next(p for p in score_season(
+        season, Weights(use_defense=True, no_defense_policy="max")).players
+        if p.tag == "#GHOST")
+
+    assert maximum.defense_points > neutral.defense_points
+    assert maximum.total == neutral.total + maximum.defense_points
+
+
+def test_attacked_players_are_not_labelled_with_the_never_attacked_policy():
+    p = defense_case([(1, 17)], weights=Weights(use_defense=True,
+                                                no_defense_policy="max"))
+    assert p.defense_policy_applied == "neutral"
 
 
 def test_defense_is_off_by_default():

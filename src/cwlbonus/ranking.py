@@ -46,14 +46,12 @@ def build_ranking(result: SeasonResult, bonuses: int = 7, min_wars: int = 0) -> 
     # Deterministic order: score desc, then name. Never rely on input order.
     ordered = sorted(result.players, key=lambda p: (-p.total, p.name.lower()))
 
-    rank_of: dict[str, int] = {}
     ranks: list[int] = []
     for i, p in enumerate(ordered):
         if i > 0 and abs(p.total - ordered[i - 1].total) < 1e-9:
             ranks.append(ranks[-1])
         else:
             ranks.append(i + 1)
-        rank_of[p.tag] = ranks[-1]
     tie_counts: dict[int, int] = {}
     for r in ranks:
         tie_counts[r] = tie_counts.get(r, 0) + 1

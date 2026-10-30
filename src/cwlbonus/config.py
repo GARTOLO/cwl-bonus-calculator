@@ -82,8 +82,13 @@ class Weights:
     bonuses: int = 7
 
     def __post_init__(self) -> None:
-        self.difficulty_clamp = (float(self.difficulty_clamp[0]),
-                                 float(self.difficulty_clamp[1]))
+        try:
+            low, high = (float(v) for v in self.difficulty_clamp)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("difficulty_clamp must be two numbers") from exc
+        if low > high:
+            raise ValueError("difficulty_clamp lower bound must not exceed the upper bound")
+        self.difficulty_clamp = (low, high)
         if self.no_defense_policy not in ("neutral", "min", "max"):
             raise ValueError(
                 f"no_defense_policy must be neutral|min|max, got {self.no_defense_policy!r}")
@@ -102,7 +107,10 @@ class Weights:
         known = {f.name for f in fields(Weights)}
         clean = {k: v for k, v in data.items() if k in known and not k.startswith("_")}
         if "difficulty_clamp" in clean:
-            clean["difficulty_clamp"] = tuple(clean["difficulty_clamp"])
+            try:
+                clean["difficulty_clamp"] = tuple(clean["difficulty_clamp"])
+            except TypeError as exc:
+                raise ValueError("difficulty_clamp must be two numbers") from exc
         return Weights(**clean)
 
 
@@ -120,7 +128,17 @@ def resolve_weights(preset: str | None = None, config_path: str | None = None,
     weights = Weights.from_dict(weights.to_dict())
 
     if config_path:
-        payload = json.loads(Path(config_path).read_text(encoding="utf-8"))
+        path = Path(config_path)
+        try:
+            raw = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            raise ValueError(f"cannot read config file {path}: {exc}") from exc
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path} is not valid JSON: {exc.msg}") from exc
+        if not isinstance(payload, dict):
+            raise ValueError(f"{path} must contain a JSON object")
         payload.pop("$schema", None)
         weights = Weights.from_dict({**weights.to_dict(), **payload})
 

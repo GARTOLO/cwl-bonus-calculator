@@ -117,7 +117,7 @@ class SeasonResult:
 
 
 def _defense_score(defenses: list[DefenseDetail], own_th: int, w: Weights
-                   ) -> tuple[float, float | None, str]:
+                   ) -> tuple[float, float | None]:
     """Per-defense defensive efficiency.
 
     The metric is stars SAVED PER DEFENSE, not stars saved in total, so being
@@ -125,14 +125,14 @@ def _defense_score(defenses: list[DefenseDetail], own_th: int, w: Weights
     """
     n = len(defenses)
     if n == 0:
-        # Nobody attacked you. This is an explicit policy, never silently equal
-        # to having been 3-starred every round.
-        return 0.0, None, w.no_defense_policy
+        # Nobody attacked you. The season-wide policy is applied later, once the
+        # best/worst observed defence is known.
+        return 0.0, None
 
     per_defense = sum(3.0 - d.stars_conceded for d in defenses) / n
     avg_attacker_th = sum(d.attacker_th for d in defenses) / n
     multiplier = w.defense_per_star + max(0.0, avg_attacker_th - own_th) * w.defense_th_bonus
-    return per_defense * multiplier, per_defense, w.no_defense_policy
+    return per_defense * multiplier, per_defense
 
 
 def _apply_no_defense_policy(players: list[PlayerScore], w: Weights) -> None:
@@ -149,7 +149,7 @@ def _apply_no_defense_policy(players: list[PlayerScore], w: Weights) -> None:
 
 
 def score_season(season: Season, weights: Weights) -> SeasonResult:
-    """Scores every player who appeared in at least one war of ``season``."""
+    """Scores every player who appeared in at least one completed war of ``season``."""
     players: dict[str, PlayerScore] = {}
     rushers: list[RusherCorrection] = []
     attacks_processed = 0
@@ -157,6 +157,11 @@ def score_season(season: Season, weights: Weights) -> SeasonResult:
     skipped: list[str] = []
 
     for war in season.wars:
+        # A round still in preparation or in progress has not had its attacks
+        # used yet. Scoring it would charge every player with a missed attack.
+        if not war.finished:
+            skipped.append(war.war_tag)
+            continue
         my_lineup = war.mine.lineup()
         their_lineup = war.theirs.lineup()
         if not my_lineup or not their_lineup:
@@ -231,8 +236,8 @@ def score_season(season: Season, weights: Weights) -> SeasonResult:
                     stars_conceded=atk.stars))
 
     # ---- finalise ---------------------------------------------------------
-    out: list[PlayerScore] = []
-    for p in players.values():
+    out = list(players.values())
+    for p in out:
         p.attacks_missed = max(0, p.wars_played - p.attacks_used)
         p.difficulty_points = p.difficulty_used_sum * weights.difficulty
         p.penalty_points = p.attacks_missed * weights.missed_attack
@@ -240,19 +245,21 @@ def score_season(season: Season, weights: Weights) -> SeasonResult:
             p.lineup_drift_points = p.lineup_drift_sum * weights.lineup_drift
 
         if weights.use_defense:
-            pts, per_star, policy = _defense_score(p.defenses, p.town_hall, weights)
+            pts, per_star = _defense_score(p.defenses, p.town_hall, weights)
             p.defense_points = pts
             p.defense_per_star = per_star
-            p.defense_policy_applied = policy
             p.defense_count = len(p.defenses)
 
+    # The never-attacked policy needs the season-wide range, and its points must
+    # be in the total: applying it after totals would display a score the
+    # ranking did not use.
+    if weights.use_defense:
+        _apply_no_defense_policy(out, weights)
+
+    for p in out:
         total = (p.attack_points + p.defense_points + p.penalty_points
                  + p.lineup_drift_points)
         p.total = total if weights.total_floor is None else max(total, weights.total_floor)
-        out.append(p)
-
-    if weights.use_defense:
-        _apply_no_defense_policy(out, weights)
 
     out.sort(key=lambda x: (-x.total, x.name.lower()))
     return SeasonResult(season=season, weights=weights, players=out,

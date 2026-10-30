@@ -24,11 +24,13 @@ matplotlib.use("Agg")  # headless: charts go straight to disk
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
+from .formatting import fmt, fmt_signed
+
 WIDTH_IN = 10.4
 PAD_X = 0.30
 PAD_TOP = 0.28
 PAD_BOTTOM = 0.24
-HEADER_IN = 1.18
+HEADER_IN = 1.24
 ROW_IN = 0.68
 BAND_IN = 0.50
 FOOTER_IN = 0.84
@@ -87,7 +89,7 @@ SKINS: dict[str, dict[str, str]] = {
         "silver": "#94a3b4",
         "bronze": "#b9712f",
         "neutral": "#e6ecf4",
-        "on_medal": "#ffffff",
+        "on_medal": "#1b1204",
         "on_neutral": "#6d7d92",
         "line": "#d98324",
         "pill_text": "#ffffff",
@@ -98,11 +100,15 @@ SKINS: dict[str, dict[str, str]] = {
 MEDAL_KEYS = {1: "gold", 2: "silver", 3: "bronze"}
 
 
-def fmt(value: float, decimals: int = 2) -> str:
-    """Number formatting that never emits '-0.00'."""
-    if abs(value) < 10 ** (-decimals) / 2:
-        value = 0.0
-    return f"{value:.{decimals}f}"
+def _bar_ratio(score: float, max_score: float) -> float:
+    """Length of the magnitude bar, measured from zero.
+
+    A negative or zero score must never paint a full bar just because every
+    score in the list happens to be negative.
+    """
+    if max_score <= 0.0 or score <= 0.0:
+        return 0.0
+    return min(1.0, score / max_score)
 
 
 def _card(ax, x, y, w, h, *, face, edge, rounding=0.06, lw=1.0, alpha=1.0, z=1):
@@ -129,10 +135,13 @@ def _pill(ax, x, y, text, *, face, color, fontsize=9.5, pad=0.16, z=6):
 def _meta_line(rp, weights, t) -> str:
     """Supporting numbers, kept short so they can stay large enough to read."""
     p = rp.player
-    bits = [f"TH{int(p.town_hall)}", f"{int(p.stars)}★",
-            f"{int(p.attacks_used)}/{int(p.wars_played)}"]
+    bits = []
+    if not rp.eligible:
+        bits.append(t("table.status_ineligible"))
+    bits += [f"TH{int(p.town_hall)}", f"{int(p.stars)}★",
+             f"{int(p.attacks_used)}/{int(p.wars_played)}"]
     if weights.difficulty:
-        bits.append(f"{t('v2.difficulty_short')} {p.difficulty_points:+.1f}")
+        bits.append(f"{t('v2.difficulty_short')} {fmt_signed(p.difficulty_points, 1)}")
     if p.attacks_missed:
         key = "v2.missed_one" if p.attacks_missed == 1 else "v2.missed_many"
         bits.append(f"{int(p.attacks_missed)} {t(key)} ({fmt(p.penalty_points)})")
@@ -175,7 +184,7 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
             va="center", fontsize=21, fontweight="bold", color=colours["title"])
     subtitle = "   ·   ".join(filter(None, [
         t("v2.league"), t.season_label(season) or None,
-        t("v2.rounds", rounds=rounds) if rounds else None]))
+        t.plural("v2.rounds", rounds) if rounds else None]))
     ax.text(card_x0, top - 0.60, f"{clan_tag}   ·   {subtitle}", ha="left", va="center",
             fontsize=9.5, color=colours["muted"])
     ax.plot([card_x0, card_x1], [top - 0.80, top - 0.80], color=colours["edge_out"],
@@ -184,9 +193,9 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
     # ------------------------------------------------- summary strip (pills)
     strip_y = top - 1.00
     cursor = card_x0
-    cursor += _pill(ax, cursor, strip_y, t("v2.bonus_pill", n=ranking.bonuses),
+    cursor += _pill(ax, cursor, strip_y, t.plural("v2.bonus_pill", ranking.bonuses),
                     face=colours["accent"], color=colours["pill_text"], fontsize=9.5) + 0.12
-    cursor += _pill(ax, cursor, strip_y, t("v2.players_pill", n=n),
+    cursor += _pill(ax, cursor, strip_y, t.plural("v2.players_pill", n),
                     face=colours["neutral"], color=colours["on_neutral"], fontsize=9.5) + 0.12
     if weights.difficulty:
         cursor += _pill(ax, cursor, strip_y, t("v2.weight_pill",
@@ -194,12 +203,12 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
                         face=colours["neutral"], color=colours["on_neutral"],
                         fontsize=9.5) + 0.12
     if ranking.cut_margin is not None:
-        ax.text(inner_x1, strip_y, t("v2.cut_margin", margin=f"{ranking.cut_margin:+.2f}"),
+        ax.text(inner_x1, strip_y, t("v2.cut_margin", margin=fmt_signed(ranking.cut_margin)),
                 ha="right", va="center", fontsize=9.5, fontweight="bold",
                 color=colours["muted"])
 
     # ------------------------------------------------------------------ rows
-    max_score = max((rp.player.total for rp in rows), default=1.0) or 1.0
+    max_score = max((rp.player.total for rp in rows), default=0.0)
     rows_top = top - HEADER_IN
 
     def row_center(index: int) -> float:
@@ -225,8 +234,8 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
               edge=colours["edge_in"] if inside else colours["edge_out"],
               lw=1.1 if inside else 0.9, z=1)
 
-        # rank badge
-        if rp.rank in MEDAL_KEYS and not rp.tied:
+        # rank badge: medals are for actual, eligible recipients only
+        if rp.eligible and rp.rank in MEDAL_KEYS and not rp.tied:
             face, ink = colours[MEDAL_KEYS[rp.rank]], colours["on_medal"]
         elif inside:
             face, ink = colours["neutral"], colours["on_neutral"]
@@ -259,7 +268,7 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
         bar_y = y2 - BAR_H_IN / 2
         _card(ax, bar_x0, bar_y, BAR_W_IN, BAR_H_IN, face=colours["track"],
               edge=colours["track"], rounding=BAR_H_IN / 2, z=2)
-        ratio = max(0.0, min(1.0, p.total / max_score))
+        ratio = _bar_ratio(p.total, max_score)
         fill_w = max(ratio * BAR_W_IN, BAR_H_IN)
         _card(ax, bar_x0, bar_y, fill_w, BAR_H_IN,
               face=colours["bar_in"] if inside else colours["bar_out"],
@@ -267,7 +276,7 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
               rounding=BAR_H_IN / 2, z=3)
 
         if weights.use_defense and p.defense_points:
-            ax.text(bar_x0 - 0.12, y2, f"+{fmt(p.defense_points)} {t('table.defense').lower()}",
+            ax.text(bar_x0 - 0.12, y2, f"{fmt_signed(p.defense_points)} {t('table.defense').lower()}",
                     ha="right", va="center", fontsize=7.8, color=colours["muted_out"],
                     zorder=4)
 
@@ -283,7 +292,7 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
                       score=fmt(ranking.cut_tie_score or 0.0))
             ink = colours["warn"]
         else:
-            label = t("v2.cut_band", n=bonus_count)
+            label = t.plural("v2.cut_band", bonus_count)
             ink = colours["line"]
         # Centred: right-aligning it would cover the next row's magnitude bar.
         ax.text(card_x0 + content_w / 2, band_cy, f"  {label}  ", ha="center",

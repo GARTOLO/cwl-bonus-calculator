@@ -4,7 +4,6 @@
 # Note: `asyncio` is deliberately NOT listed. The PyPI package of that name is a
 # 2015 backport of the stdlib module and shadows it on some interpreters.
 coc.py==4.0.0
-pandas>=2.2,<4
 matplotlib>=3.8,<4
 tabulate>=0.9,<1
 python-dotenv>=1.0,<2

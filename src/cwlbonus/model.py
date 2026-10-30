@@ -51,6 +51,15 @@ class War:
     mine: WarSide
     theirs: WarSide
 
+    @property
+    def finished(self) -> bool:
+        """Only an ended war is safe to score.
+
+        The API reports ``warEnded``; ``War Ended`` is the enum's display name
+        and appears in snapshots written before the state was normalised.
+        """
+        return str(self.state).replace(" ", "").lower() == "warended"
+
 
 @dataclass
 class Season:

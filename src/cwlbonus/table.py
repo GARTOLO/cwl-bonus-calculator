@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from tabulate import tabulate
 
-from .chart import fmt
 from .config import Weights
+from .formatting import fmt
 from .ranking import Ranking
 from .scoring import SeasonResult
 
@@ -31,6 +31,9 @@ def build_warnings(ranking: Ranking, result: SeasonResult, weights: Weights, t) 
     if result.rusher_corrections:
         warnings.append(t("warn.rusher_correction",
                           count=len(result.rusher_corrections)))
+
+    if result.skipped_war_tags:
+        warnings.append(t("warn.skipped", count=len(result.skipped_war_tags)))
 
     if not result.wars_processed:
         warnings.append(t("warn.empty_season"))

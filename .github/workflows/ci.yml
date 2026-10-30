@@ -32,7 +32,7 @@ jobs:
         run: |
           python -c "
           import importlib
-          for m in ['pandas','matplotlib','tabulate','dotenv','coc','dateutil']:
+          for m in ['matplotlib','tabulate','dotenv','coc','dateutil']:
               importlib.import_module(m)
               print('ok', m)
           "

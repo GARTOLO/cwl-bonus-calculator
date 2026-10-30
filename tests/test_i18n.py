@@ -54,6 +54,27 @@ def test_bad_placeholder_does_not_crash():
     assert t("warn.missed") != ""          # no kwargs supplied
 
 
+def test_bad_format_specifier_does_not_crash():
+    """A malformed format field raises ValueError, not only KeyError."""
+    t = Translator("en")
+    t._data = {**t._data, "test.broken": "value {x:not-a-spec}"}
+    assert t("test.broken", x=1) == "value {x:not-a-spec}"
+
+
+def test_region_codes_normalise_to_a_shipped_language():
+    from cwlbonus.i18n import normalise_lang
+    assert normalise_lang("en-US") == "en"
+    assert normalise_lang("es_MX") == "es"
+    assert normalise_lang(" EN ") == "en"
+
+
+def test_plural_uses_the_one_variant_and_falls_back_cleanly():
+    t = Translator("en")
+    assert t.plural("v2.bonus_pill", 1) == "1 BONUS"
+    assert t.plural("v2.bonus_pill", 2) == "2 BONUSES"
+    assert t.plural("does.not.exist", 1) == "does.not.exist"
+
+
 def test_missing_key_falls_back_to_english(monkeypatch, tmp_path):
     from cwlbonus import i18n
     monkeypatch.setattr(i18n, "LOCALES_DIR", tmp_path)

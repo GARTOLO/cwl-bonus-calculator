@@ -18,12 +18,11 @@ from . import __version__
 from .chart import render_chart
 from .chart_classic import render_chart as render_chart_classic
 from .config import PRESETS, SKINS, STYLES, Weights, resolve_weights
-from .fetch import FetchError, dump_season, fetch_season, normalise_tag
-from .i18n import Translator, available_languages, resolve_lang
+from .fetch import FetchError, dump_season, fetch_season
+from .i18n import Translator, available_languages, normalise_lang, resolve_lang
 from .ranking import build_ranking
 from .scoring import score_season
 from .table import build_report
-from .chart import render_chart
 
 EXIT_OK = 0
 EXIT_ERROR = 1
@@ -107,7 +106,8 @@ async def _run(args, weights: Weights, t: Translator) -> int:
 
     result = score_season(season, weights)
     if not result.players:
-        print("!!  " + t("error.no_players"), file=sys.stderr)
+        key = "error.no_completed_wars" if not result.wars_processed else "error.no_players"
+        print("!!  " + t(key), file=sys.stderr)
         return EXIT_ERROR
 
     ranking = build_ranking(result, bonuses=weights.bonuses, min_wars=weights.min_wars)
@@ -152,13 +152,13 @@ def main(argv: list[str] | None = None) -> int:
     requested = pre_args.lang or os.getenv("CWL_LANG")
     lang = resolve_lang(pre_args.lang)
     t = Translator(lang)
-    if requested and requested != lang and str(requested).split("_")[0] != lang:
+    if requested and normalise_lang(requested) != lang:
         print("!!  " + t("error.unknown_lang", lang=requested), file=sys.stderr)
 
     args = build_parser(t).parse_args(argv)
     try:
         weights = _weights_from_args(args, t)
-    except ValueError as exc:
+    except (ValueError, TypeError) as exc:
         print(f"!!  {exc}", file=sys.stderr)
         return EXIT_ERROR
 

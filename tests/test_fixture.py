@@ -169,6 +169,24 @@ def test_config_file_overrides_survive_resolution(tmp_path):
     assert weights.bonuses == 3
 
 
+def test_a_missing_config_file_is_a_clean_error(tmp_path):
+    with pytest.raises(ValueError, match="cannot read config file"):
+        resolve_weights(config_path=str(tmp_path / "nope.json"))
+
+
+def test_malformed_config_is_a_clean_error(tmp_path):
+    config = tmp_path / "weights.json"
+    config.write_text("{not json", encoding="utf-8")
+    with pytest.raises(ValueError, match="not valid JSON"):
+        resolve_weights(config_path=str(config))
+
+
+@pytest.mark.parametrize("clamp", [[1.0], [3.0, -1.0], 1.0])
+def test_bad_difficulty_clamp_is_rejected(clamp):
+    with pytest.raises(ValueError, match="difficulty_clamp"):
+        Weights(difficulty_clamp=clamp)
+
+
 def test_defense_mode_is_usable_on_real_data(season):
     weights = Weights(use_defense=True, difficulty=0.3)
     result = score_season(season, weights)

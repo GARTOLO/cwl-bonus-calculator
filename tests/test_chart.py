@@ -10,10 +10,13 @@ import warnings
 
 import pytest
 from conftest import result_with
+from matplotlib.colors import to_rgba
 from matplotlib.figure import Figure
+from matplotlib.patches import Circle
 
-from cwlbonus.chart import SKINS, fmt, render_chart
+from cwlbonus.chart import SKINS, _bar_ratio, render_chart
 from cwlbonus.config import Weights
+from cwlbonus.formatting import fmt, fmt_signed
 from cwlbonus.i18n import Translator
 from cwlbonus.ranking import build_ranking
 
@@ -249,3 +252,47 @@ def test_score_is_formatted_without_negative_zero(tmp_path):
     assert fmt(-0.5) == "-0.50"
     text = rendered_text(tmp_path, make_ranking(4))
     assert "-0.00" not in text
+
+
+def test_signed_formatting_keeps_the_sign_and_drops_negative_zero():
+    assert fmt_signed(0.5) == "+0.50"
+    assert fmt_signed(-0.5) == "-0.50"
+    assert fmt_signed(-0.0) == "+0.00"
+    assert fmt_signed(-0.001) == "+0.00"
+
+
+def test_non_positive_scores_do_not_paint_a_full_bar():
+    assert _bar_ratio(10.0, 10.0) == 1.0
+    assert _bar_ratio(5.0, 10.0) == 0.5
+    assert _bar_ratio(0.0, 10.0) == 0.0
+    assert _bar_ratio(-5.0, -1.0) == 0.0
+
+
+def test_ineligible_player_is_labelled_and_gets_no_medal(tmp_path):
+    ranking = build_ranking(
+        result_with([("Sub", 40.0, 1), ("A", 30.0, 7), ("B", 20.0, 7)]),
+        bonuses=1, min_wars=4)
+    assert ranking.recipients == ["A"]
+
+    text = rendered_text(tmp_path, ranking)
+    assert "INELIGIBLE" in text.upper()
+
+    seen: dict[str, list] = {}
+    original = Figure.savefig
+
+    def spy(self, *args, **kw):
+        self.canvas.draw()
+        seen["badges"] = [p.get_facecolor() for ax in self.axes
+                          for p in ax.patches if isinstance(p, Circle)]
+        return original(self, *args, **kw)
+
+    Figure.savefig = spy
+    try:
+        render_chart(ranking, Weights(), Translator("en"), tmp_path,
+                     clan_name="C", clan_tag="#T", season="2026-10-02", rounds=7)
+    finally:
+        Figure.savefig = original
+
+    gold = to_rgba(SKINS["dark"]["gold"])
+    assert len(seen["badges"]) == 3
+    assert all(badge[:3] != gold[:3] for badge in seen["badges"])

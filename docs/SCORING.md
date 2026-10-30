@@ -18,6 +18,7 @@ Total:
 
 ```
 total = Σ attack_points + Σ missed_attacks × missed_attack_penalty
+        (+ defensive points and lineup-drift points when those options are on)
 ```
 
 With the defaults (`difficulty = 0.5`, `missed_attack = −2.0`).
@@ -112,6 +113,8 @@ missed = wars_played − attacks_used
 ```
 
 is arithmetically sound.
+
+Only **completed** wars are scored. A round still in preparation or in progress has not had its attacks used yet, so it is skipped (and reported in the terminal warnings) rather than charging everyone with a miss. Running the tool mid-season therefore ranks the rounds that have finished.
 
 - A player **benched** for a round is not on the roster for that war, so `wars_played` does not count it and they are not charged. Verified.
 - A **late substitute** who played one war and missed their only attack *is* charged. Also correct, and verified.

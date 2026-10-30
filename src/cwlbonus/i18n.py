@@ -46,6 +46,11 @@ def catalog(lang: str) -> dict[str, str]:
     return base
 
 
+def normalise_lang(code: str) -> str:
+    """'en-US', 'en_US' and 'EN' all normalise to 'en'."""
+    return str(code).replace("-", "_").split("_")[0].strip().lower()
+
+
 def resolve_lang(cli_lang: str | None = None) -> str:
     """CLI flag > CWL_LANG env var > system locale > English."""
     langs = available_languages()
@@ -59,7 +64,7 @@ def resolve_lang(cli_lang: str | None = None) -> str:
     for cand in candidates:
         if not cand:
             continue
-        code = str(cand).replace("-", "_").split("_")[0].strip().lower()
+        code = normalise_lang(cand)
         if code in langs:
             return code
     return FALLBACK if FALLBACK in langs else next(iter(langs), FALLBACK)
@@ -78,9 +83,19 @@ class Translator:
             return text
         try:
             return text.format(**kwargs)
-        except (KeyError, IndexError):
+        except (KeyError, IndexError, ValueError):
             # A catalog mistake must never crash a run mid-season.
             return text
+
+    def plural(self, key: str, n: int, **kwargs: Any) -> str:
+        """Uses ``<key>_one`` for exactly one, otherwise ``<key>``.
+
+        Catalogs may omit the ``_one`` variant; the count is then interpolated
+        into the base key, so a missing translation degrades instead of crashing.
+        """
+        if n == 1 and f"{key}_one" in self._data:
+            return self(f"{key}_one", n=n, **kwargs)
+        return self(key, n=n, **kwargs)
 
     def month(self, number: int) -> str:
         return self(f"months.{int(number)}")

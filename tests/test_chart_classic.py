@@ -11,10 +11,13 @@ import warnings
 
 import pytest
 from conftest import result_with
+from matplotlib.colors import to_rgba
 from matplotlib.figure import Figure
+from matplotlib.patches import Rectangle
 
-from cwlbonus.chart_classic import fmt, render_chart
+from cwlbonus.chart_classic import PALETTE, render_chart
 from cwlbonus.config import Weights
+from cwlbonus.formatting import fmt
 from cwlbonus.i18n import Translator
 from cwlbonus.ranking import build_ranking
 
@@ -264,6 +267,67 @@ def test_cut_tie_note_replaces_the_margin_note(tmp_path):
         Figure.savefig = original
     assert "TIE" in seen["text"].upper()
     assert "T1" in seen["text"] and "T2" in seen["text"]
+
+
+def test_ineligible_players_are_not_coloured_as_bonus_recipients(tmp_path):
+    """Eligibility must drive the bars, not simply the top N rows."""
+    ranking = build_ranking(
+        result_with([("Sub", 40.0, 1), ("A", 30.0, 7), ("B", 20.0, 7),
+                     ("C", 10.0, 7), ("D", 5.0, 7)]),
+        bonuses=2, min_wars=4)
+    assert ranking.recipients == ["A", "B"]
+
+    seen: dict[str, set[str]] = {}
+    original = Figure.savefig
+
+    def spy(self, *args, **kw):
+        self.canvas.draw()
+        ax = next(a for a in self.axes if a.axison)
+        labels = {round(loc): lab.get_text()
+                  for loc, lab in zip(ax.get_yticks(), ax.get_yticklabels())}
+        blue = to_rgba(PALETTE["blue"])[:3]
+        seen["bonus"] = {
+            labels[round(p.get_y() + p.get_height() / 2)]
+            for p in ax.patches
+            if isinstance(p, Rectangle) and p.get_facecolor()[:3] == blue
+        }
+        return original(self, *args, **kw)
+
+    Figure.savefig = spy
+    try:
+        render_chart(ranking, Weights(), Translator("en"), tmp_path,
+                     clan_name="C", clan_tag="#T", season="2026-10-02", rounds=7)
+    finally:
+        Figure.savefig = original
+
+    names = {row.rsplit("   ", 1)[-1] for row in seen["bonus"]}
+    assert names == {"A", "B"}, names
+
+
+def test_axis_covers_attack_points_even_when_a_penalty_lowers_the_total(tmp_path):
+    result = result_with([("Penalised", 18.0, 7), ("Clean", 17.0, 7)])
+    by_name = {p.name: p for p in result.players}
+    by_name["Penalised"].attack_points = 20.0
+    by_name["Penalised"].penalty_points = -2.0
+    ranking = build_ranking(result, bonuses=1)
+
+    seen: dict[str, tuple[float, float]] = {}
+    original = Figure.savefig
+
+    def spy(self, *args, **kw):
+        self.canvas.draw()
+        ax = next(a for a in self.axes if a.axison)
+        seen["xlim"] = ax.get_xlim()
+        return original(self, *args, **kw)
+
+    Figure.savefig = spy
+    try:
+        render_chart(ranking, Weights(), Translator("en"), tmp_path,
+                     clan_name="C", clan_tag="#T", season="2026-10-02", rounds=7)
+    finally:
+        Figure.savefig = original
+
+    assert seen["xlim"][1] >= 20.0 * 1.62
 
 
 # -------------------------------------------------------------------- helpers

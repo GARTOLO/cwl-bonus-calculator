@@ -20,7 +20,7 @@
   "cli.config": "Ruta a un fichero JSON de configuración que sobrescribe pesos concretos.",
   "cli.style": "Diseño del gráfico: leaderboard (lista de tarjetas, por defecto) o classic (el gráfico de barras original).",
   "cli.skin": "Esquema de color del diseño leaderboard: dark (por defecto) o light.",
-  "cli.debug": "Escribe el detalle por ataque en la carpeta de salida.",
+  "cli.debug": "Escribe la temporada cruda descargada en JSON para auditarla.",
   "cli.rusher_cap": "Máximo de niveles de Ayuntamiento que puede restar la corrección de rusheados (por defecto: 2).",
   "cli.list_langs": "Muestra los idiomas disponibles y sale.",
 
@@ -40,6 +40,7 @@
   "error.no_group": "No se pudo leer el grupo de liga de este clan.",
   "error.no_data": "No se pudieron obtener datos de la liga.",
   "error.no_players": "Ningún jugador participó en una guerra esta temporada, no hay nada que puntuar.",
+  "error.no_completed_wars": "Todavía no hay guerras terminadas. Vuelve a ejecutarlo cuando acabe una ronda.",
   "error.unknown_lang": "Idioma desconocido '{lang}'. Se usará inglés.",
   "error.cancelled": "Proceso cancelado por el usuario.",
 
@@ -67,6 +68,7 @@
   "warn.tie_at_cut": "EMPATE EN EL CORTE DEL BONO — {players} empatan con {score}. Con {bonuses} bonos hace falta una decisión humana.",
   "warn.ineligible": "{count} jugador(es) jugaron menos de {min_wars} guerra(s) y quedan marcados como no elegibles.",
   "warn.rusher_correction": "{count} base(s) rivales se corrigieron a la baja por estar rusheadas.",
+  "warn.skipped": "{count} guerra(s) no se puntuaron por no haber terminado o no tener alineación.",
   "warn.empty_season": "Esta liga todavía no tiene guerras terminadas.",
 
   "chart.bonus_zone": "Zona de bono",
@@ -84,11 +86,15 @@
 
   "v2.league": "CWL",
   "v2.rounds": "{rounds} rondas",
+  "v2.rounds_one": "1 ronda",
   "v2.bonus_pill": "{n} BONOS",
+  "v2.bonus_pill_one": "1 BONO",
   "v2.players_pill": "{n} jugadores",
+  "v2.players_pill_one": "1 jugador",
   "v2.weight_pill": "dificultad {weight}",
   "v2.cut_margin": "margen al corte: {margin}",
   "v2.cut_band": "CORTE · {n} BONOS",
+  "v2.cut_band_one": "CORTE · 1 BONO",
   "v2.attacks_short": "ataques",
   "v2.difficulty_short": "dif",
   "v2.missed_one": "ataque sin usar",
