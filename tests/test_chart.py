@@ -214,6 +214,8 @@ def test_localised_chart_uses_the_spanish_catalog(tmp_path):
     text = rendered_text(tmp_path, make_ranking(5), t=Translator("es"))
     assert "BONOS" in text
     assert "Entra en el bono" in text
+    assert "7 rondas" in text
+    assert "{rounds}" not in text
 
 
 def test_cut_tie_replaces_the_cut_label(tmp_path):

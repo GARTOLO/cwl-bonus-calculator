@@ -184,7 +184,7 @@ def render_chart(ranking, weights, t, output_dir: str | Path, *,
             va="center", fontsize=21, fontweight="bold", color=colours["title"])
     subtitle = "   ·   ".join(filter(None, [
         t("v2.league"), t.season_label(season) or None,
-        t.plural("v2.rounds", rounds) if rounds else None]))
+        t.plural("v2.rounds", rounds, rounds=rounds) if rounds else None]))
     ax.text(card_x0, top - 0.60, f"{clan_tag}   ·   {subtitle}", ha="left", va="center",
             fontsize=9.5, color=colours["muted"])
     ax.plot([card_x0, card_x1], [top - 0.80, top - 0.80], color=colours["edge_out"],
